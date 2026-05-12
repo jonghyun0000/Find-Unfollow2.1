@@ -1,0 +1,20 @@
+{
+  "name": "Unfollow Lens",
+  "short_name": "Unfollow Lens",
+  "description": "인스타그램 언팔러 및 맞팔 분석 PWA. 모든 처리는 브라우저 안에서만 이루어집니다.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#08070D",
+  "theme_color": "#08070D",
+  "lang": "ko",
+  "categories": ["social", "utilities", "productivity"],
+  "icons": [
+    { "src": "/icons/icon-192.svg", "sizes": "192x192", "type": "image/svg+xml", "purpose": "any maskable" },
+    { "src": "/icons/icon-512.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "any maskable" }
+  ],
+  "shortcuts": [
+    { "name": "업로드", "url": "/upload", "description": "JSON 파일 업로드" },
+    { "name": "대시보드", "url": "/dashboard", "description": "최근 분석 결과" }
+  ]
+}
