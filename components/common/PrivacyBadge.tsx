@@ -7,12 +7,12 @@ export function PrivacyBadge({ className }: { className?: string }) {
     <div
       className={cn(
         'inline-flex items-center gap-2 px-3 py-1.5 rounded-full',
-        'bg-emerald-500/10 border border-emerald-500/25 text-emerald-300 text-xs font-medium',
+        'bg-emerald-500/10 border border-emerald-500/25 text-emerald-700 text-xs font-medium',
         className,
       )}
     >
       <ShieldCheck size={14} />
-      <span>내 데이터는 저장되지 않습니다 · 100% 브라우저 처리</span>
+      <span>파일은 서버로 전송되지 않습니다</span>
     </div>
   );
 }

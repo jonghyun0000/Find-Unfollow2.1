@@ -1,177 +1,216 @@
-// app/upload/page.tsx — 파일 업로드 페이지
 'use client';
-
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, AlertTriangle, FlaskConical } from 'lucide-react';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { DropZone } from '@/components/upload/DropZone';
 import { GradientButton } from '@/components/ui/GradientButton';
 import { PrivacyBadge } from '@/components/common/PrivacyBadge';
-import { LoadingSpinner } from '@/components/common/LoadingSpinner';
-import { detectFileKind, parseFollowers, parseFollowing, safeParseJSON } from '@/lib/parser';
+import {
+  normalizeUsername,
+  validateFileSelection,
+  parseFollowers,
+  parseFollowing,
+} from '@/lib/parser';
 import { analyze } from '@/lib/analyzer';
 import { useAnalysisStore } from '@/store/useAnalysisStore';
 import { SAMPLE_FOLLOWERS_JSON, SAMPLE_FOLLOWING_JSON } from '@/lib/sample-data';
+import type { AnalysisResult } from '@/types';
 
+const today = () => {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+};
 export default function UploadPage() {
   const router = useRouter();
   const setCurrent = useAnalysisStore((s) => s.setCurrent);
-
-  const [followingFile, setFollowingFile] = useState<File | null>(null);
-  const [followersFile, setFollowersFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
+  const [account, setAccount] = useState('');
+  const [snapshotDate, setSnapshotDate] = useState(today);
+  const [complete, setComplete] = useState(false);
+  const [persist, setPersist] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [running, setRunning] = useState(false);
+  const worker = useRef<Worker | null>(null);
+  const request = useRef(0);
+  useEffect(
+    () => () => {
+      request.current++;
+      worker.current?.terminate();
+    },
+    [],
+  );
 
-  /**
-   * 파일을 텍스트로 읽어 JSON 으로 파싱.
-   */
-  const readFile = (f: File) =>
-    new Promise<unknown>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        try { resolve(safeParseJSON(String(reader.result ?? ''))); }
-        catch (e) { reject(e); }
-      };
-      reader.onerror = () => reject(new Error('파일 읽기 실패'));
-      reader.readAsText(f);
-    });
-
-  const runAnalysis = async () => {
+  const runAnalysis = async (event: React.FormEvent) => {
+    event.preventDefault();
     setError(null);
-    if (!followingFile || !followersFile) {
-      setError('두 파일을 모두 업로드해주세요. (following.json, followers_1.json)');
-      return;
-    }
-
-    setRunning(true);
+    const token = ++request.current;
     try {
-      const [rawA, rawB] = await Promise.all([
-        readFile(followingFile),
-        readFile(followersFile),
-      ]);
-
-      // 사용자가 두 슬롯을 바꿔 넣더라도 자동 보정
-      const kindA = detectFileKind(rawA, followingFile.name);
-      const kindB = detectFileKind(rawB, followersFile.name);
-
-      let followingRaw: unknown = rawA;
-      let followersRaw: unknown = rawB;
-      if (kindA === 'followers' && kindB === 'following') {
-        followingRaw = rawB;
-        followersRaw = rawA;
-      } else if (kindA === 'unknown' || kindB === 'unknown') {
-        // 그냥 신뢰: 사용자가 올린 슬롯 위치를 따름
-      }
-
-      const following = parseFollowing(followingRaw);
-      const followers = parseFollowers(followersRaw);
-
-      if (!following.length && !followers.length) {
-        setError('파일 형식을 인식할 수 없습니다. 인스타그램에서 받은 JSON 파일이 맞는지 확인해주세요.');
-        setRunning(false);
-        return;
-      }
-
-      // 시각적으로 분석 중인 게 보이도록 살짝 지연
-      await new Promise((r) => setTimeout(r, 700));
-      const result = analyze(following, followers);
-      setCurrent(result);
-      router.push('/dashboard');
+      const owner = normalizeUsername(account);
+      validateFileSelection(files);
+      if (!complete) throw new Error('전체 기간으로 받은 모든 파일인지 확인해주세요.');
+      if (
+        !/^\d{4}-\d{2}-\d{2}$/.test(snapshotDate) ||
+        snapshotDate > today() ||
+        new Date(snapshotDate).toISOString().slice(0, 10) !== snapshotDate
+      )
+        throw new Error('데이터 기준일을 확인해주세요. 미래 날짜는 사용할 수 없습니다.');
+      setRunning(true);
+      const result = await new Promise<AnalysisResult>((resolve, reject) => {
+        const instance = new Worker(new URL('../../lib/import.worker.ts', import.meta.url));
+        worker.current = instance;
+        instance.onmessage = (e: MessageEvent<{ result?: AnalysisResult; error?: string }>) => {
+          instance.terminate();
+          worker.current = null;
+          if (e.data.result) resolve(e.data.result);
+          else reject(new Error(e.data.error ?? '분석에 실패했습니다.'));
+        };
+        instance.onerror = () => {
+          instance.terminate();
+          worker.current = null;
+          reject(
+            new Error('분석 도구를 실행하지 못했습니다. 페이지를 새로고침하고 다시 시도해주세요.'),
+          );
+        };
+        instance.postMessage({ files, account: owner, snapshotDate });
+      });
+      if (token !== request.current) return;
+      await setCurrent(result, { persist });
+      if (token === request.current) router.push('/dashboard');
     } catch (e) {
-      const msg = e instanceof Error ? e.message : '알 수 없는 오류가 발생했습니다.';
-      setError(msg);
-      setRunning(false);
+      if (token === request.current)
+        setError(e instanceof Error ? e.message : '파일을 분석하지 못했습니다.');
+    } finally {
+      if (token === request.current) setRunning(false);
     }
   };
-
-  const runSample = async () => {
+  const sample = async () => {
     setRunning(true);
     setError(null);
-    await new Promise((r) => setTimeout(r, 500));
-    const following = parseFollowing(SAMPLE_FOLLOWING_JSON);
-    const followers = parseFollowers(SAMPLE_FOLLOWERS_JSON);
-    const result = analyze(following, followers);
-    setCurrent(result, { persist: false }); // 샘플은 저장하지 않음
+    const result = analyze(
+      parseFollowing(SAMPLE_FOLLOWING_JSON),
+      parseFollowers(SAMPLE_FOLLOWERS_JSON),
+      { account: 'sample', snapshotDate: today() },
+    );
+    result.isSample = true;
+    await setCurrent(result);
     router.push('/dashboard');
   };
-
   return (
     <>
-      <PageHeader title="파일 업로드" subtitle="JSON 두 개를 올려주세요" back />
-
-      <div className="mx-auto max-w-md px-5 py-6 space-y-5">
+      <PageHeader title="데이터 분석" subtitle="내보내기 파일을 이 기기에서만 읽습니다" back />
+      <form onSubmit={runAnalysis} className="mx-auto max-w-md px-5 py-6 space-y-5">
         <PrivacyBadge />
-
-        <AnimatePresence>
-          {running ? (
-            <motion.div
-              key="loading"
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              className="glass-strong rounded-3xl p-10 flex flex-col items-center"
-            >
-              <LoadingSpinner size={72} label="분석 중... 잠시만요" />
-              <p className="mt-3 text-[12px] text-white/45 text-center">
-                서버로 업로드되지 않습니다. 모든 처리는 이 기기에서만 일어납니다.
-              </p>
-            </motion.div>
-          ) : (
-            <motion.div
-              key="form"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="space-y-4"
-            >
-              <DropZone
-                label="following.json"
-                hint="내가 팔로우 한 사람 목록"
-                file={followingFile}
-                onFileChange={setFollowingFile}
-              />
-              <DropZone
-                label="followers_1.json"
-                hint="나를 팔로우 한 사람 목록"
-                file={followersFile}
-                onFileChange={setFollowersFile}
-              />
-
-              {error && (
-                <motion.div
-                  initial={{ opacity: 0, y: -4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="flex gap-2 items-start glass rounded-2xl p-4 border border-rose-500/30"
-                >
-                  <AlertTriangle size={16} className="text-rose-300 mt-0.5 shrink-0" />
-                  <p className="text-[13px] text-rose-200">{error}</p>
-                </motion.div>
-              )}
-
-              <GradientButton onClick={runAnalysis} size="lg" className="w-full" disabled={!followingFile || !followersFile}>
-                <Sparkles size={18} /> 분석 시작
-              </GradientButton>
-
-              <div className="relative my-2">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-white/10" />
-                </div>
-                <div className="relative flex justify-center">
-                  <span className="px-3 text-[11px] uppercase tracking-widest text-white/40 bg-ink-950">
-                    또는
-                  </span>
-                </div>
-              </div>
-
-              <GradientButton onClick={runSample} size="md" variant="ghost" className="w-full">
-                <FlaskConical size={16} /> 샘플 데이터로 체험해보기
-              </GradientButton>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+        <p className="text-sm text-slate-600">
+          ZIP 압축을 풀어 <b>following.json 1개</b>와{' '}
+          <b>followers_1.json, followers_2.json 등 모든 팔로워 파일</b>을 선택해주세요. 파일당 20MB,
+          전체 50MB까지 가능합니다.
+        </p>
+        <fieldset disabled={running} className="space-y-5 disabled:opacity-60">
+          <DropZone
+            files={files}
+            onFilesChange={(next) => {
+              setFiles(next);
+              setComplete(false);
+              setError(null);
+            }}
+          />
+          <label className="block text-sm font-medium">
+            내 인스타그램 아이디
+            <input
+              required
+              value={account}
+              onChange={(e) => setAccount(e.target.value)}
+              autoComplete="off"
+              autoCapitalize="none"
+              spellCheck={false}
+              maxLength={31}
+              placeholder="예: jonghyun0000"
+              className="field mt-2"
+            />
+            <span className="block mt-2 text-xs text-slate-600">
+              로그인에 사용하지 않습니다. 다른 계정의 기록과 섞이지 않도록 구분합니다.
+            </span>
+          </label>
+          <label className="block text-sm font-medium">
+            데이터 기준일
+            <input
+              required
+              type="date"
+              value={snapshotDate}
+              max={today()}
+              onChange={(e) => setSnapshotDate(e.target.value)}
+              className="field mt-2"
+            />
+            <span className="block mt-2 text-xs text-slate-600">
+              인스타그램에서 이 데이터를 생성한 날짜입니다. 같은 계정·날짜로 저장하면 기존 기록을
+              교체합니다.
+            </span>
+          </label>
+          <label className="flex gap-3 text-sm leading-relaxed">
+            <input
+              className="mt-1 size-5 shrink-0 accent-pink-500"
+              type="checkbox"
+              checked={complete}
+              onChange={(e) => setComplete(e.target.checked)}
+            />
+            전체 기간으로 요청한 같은 계정의 파일이며, 모든 팔로워 파일을 선택했습니다.
+          </label>
+          <p className="text-xs text-slate-600">
+            파일 일부가 빠지거나 다른 기준일의 파일이 섞이면 결과가 틀릴 수 있습니다. 마지막 분할
+            파일 누락은 앱이 자동으로 확인할 수 없습니다.
+          </p>
+          <label className="flex gap-3 text-sm leading-relaxed">
+            <input
+              className="mt-1 size-5 shrink-0 accent-pink-500"
+              type="checkbox"
+              checked={persist}
+              onChange={(e) => setPersist(e.target.checked)}
+            />
+            이 기기에 분석 기록 저장 (계정별 최근 10개). 이후 팔로워 변화를 비교할 수 있습니다.
+          </label>
+        </fieldset>
+        {error && (
+          <p
+            role="alert"
+            aria-label="파일 분석 오류"
+            className="rounded-2xl border border-rose-400/40 bg-rose-500/10 p-4 text-sm text-rose-700"
+          >
+            {error}
+          </p>
+        )}
+        <GradientButton
+          type="submit"
+          className="w-full"
+          size="lg"
+          disabled={running || !files.length || !complete}
+          loading={running}
+        >
+          {running ? '분석 중…' : '분석 시작'}
+        </GradientButton>
+        {running && (
+          <button
+            type="button"
+            className="w-full p-3 text-sm text-slate-600"
+            onClick={() => {
+              request.current++;
+              worker.current?.terminate();
+              worker.current = null;
+              setRunning(false);
+            }}
+          >
+            분석 취소
+          </button>
+        )}
+        <GradientButton
+          type="button"
+          className="w-full"
+          variant="ghost"
+          disabled={running}
+          onClick={sample}
+        >
+          샘플 데이터로 체험하기
+        </GradientButton>
+      </form>
     </>
   );
 }

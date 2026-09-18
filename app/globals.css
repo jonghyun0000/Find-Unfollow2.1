@@ -1,74 +1,86 @@
-/* app/globals.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Pretendard - 한국어 모던 폰트 */
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css');
-
 :root {
-  --bg: #08070D;
-  --fg: #F5F3FA;
-  --muted: rgba(245, 243, 250, 0.55);
-  --border: rgba(255, 255, 255, 0.08);
+  --bg: #f7f8fa;
+  --fg: #202735;
+  color-scheme: light;
 }
-
 * {
   -webkit-tap-highlight-color: transparent;
 }
-
-html, body {
+html,
+body {
   background: var(--bg);
   color: var(--fg);
-  font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  font-feature-settings: 'cv11', 'ss01';
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overscroll-behavior-y: none;
 }
-
-/* SafeArea 대응 (iOS 노치/홈인디케이터) */
 body {
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
 }
-
-/* 글래스 카드 */
 @layer components {
-  .glass {
-    @apply bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] shadow-glass;
-  }
+  .glass,
   .glass-strong {
-    @apply bg-white/[0.07] backdrop-blur-2xl border border-white/[0.1] shadow-glass;
+    @apply bg-white border border-slate-200 shadow-glass;
   }
   .ig-text {
-    @apply bg-ig-gradient bg-clip-text text-transparent;
+    @apply text-brand;
   }
   .ig-border {
-    background: linear-gradient(var(--bg), var(--bg)) padding-box,
-                linear-gradient(135deg, #FCAF45, #E1306C, #833AB4) border-box;
-    border: 1px solid transparent;
+    @apply border border-slate-300 bg-white;
   }
-  /* 스켈레톤 셀 */
   .skeleton {
-    @apply bg-gradient-to-r from-white/5 via-white/10 to-white/5 bg-[length:400px_100%] animate-shimmer rounded-xl;
+    @apply bg-slate-200 animate-pulse rounded-xl;
   }
 }
-
-/* 스크롤바 */
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 999px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.16); }
-
-/* 포커스 링 */
 :focus-visible {
-  outline: 2px solid #EC4899;
-  outline-offset: 2px;
-  border-radius: 8px;
+  outline: 3px solid #6554c0;
+  outline-offset: 3px;
 }
-
-/* 모바일 네비게이션을 위한 본문 패딩 */
 .with-bottom-nav {
-  padding-bottom: calc(env(safe-area-inset-bottom) + 88px);
+  padding-bottom: calc(env(safe-area-inset-bottom) + 96px);
+}
+.field {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 12px;
+  background: white;
+  color: #202735;
+}
+button,
+a,
+input {
+  touch-action: manipulation;
+}
+dialog::backdrop {
+  background: rgba(15, 23, 42, 0.38);
+  backdrop-filter: blur(3px);
+}
+dialog[open] {
+  animation: appear 0.18s ease-out;
+}
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

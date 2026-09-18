@@ -1,141 +1,100 @@
-// app/page.tsx — 랜딩 페이지
-'use client';
-
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { ArrowRight, ShieldCheck, Sparkles, Eye, BarChart3, Heart, Search } from 'lucide-react';
-import { GradientButton } from '@/components/ui/GradientButton';
-import { GlassCard } from '@/components/ui/GlassCard';
-
+import { ArrowRight, ShieldCheck, Users, History, Download, ScanLine } from 'lucide-react';
+import { InstallGuide } from '@/components/common/InstallGuide';
 const features = [
-  { icon: Eye,        title: '언팔러 자동 추적',     desc: '나를 안 따르는 사람을 한 번에 확인' },
-  { icon: Heart,      title: '맞팔 친구 모아보기',   desc: '진짜 친구들만 따로 정리' },
-  { icon: BarChart3,  title: '증감 통계',            desc: '팔로워 변화 추이를 그래프로' },
-  { icon: Search,     title: '빠른 검색',            desc: '아이디로 즉시 필터링' },
+  { icon: Users, title: '맞팔 관계 한눈에', body: '나를 안 따르는 계정부터 맞팔까지.' },
+  { icon: History, title: '달라진 팔로워 확인', body: '지난 기록과 비교해 변화를 확인해요.' },
+  { icon: Download, title: '찾고, 저장하고', body: '계정을 검색하고 전체 목록을 CSV로.' },
 ];
-
 export default function LandingPage() {
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* 히어로 */}
-      <section className="relative px-5 pt-12 pb-10 overflow-hidden">
-        {/* 배경 블롭 */}
-        <div aria-hidden className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-ig-pink/30 blur-3xl" />
-        <div aria-hidden className="absolute -bottom-32 -left-24 w-72 h-72 rounded-full bg-accent-purple/30 blur-3xl" />
-
-        <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="relative mx-auto max-w-md"
+    <div className="mx-auto max-w-md px-5 pb-8 pt-7">
+      <header className="flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2 text-base font-bold tracking-tight">
+          <span className="grid h-9 w-9 place-items-center rounded-xl bg-brand text-white">
+            <ScanLine size={21} />
+          </span>
+          Unfollow Lens
+        </Link>
+        <Link href="/guide" className="rounded-lg px-3 py-2 text-xs font-medium text-slate-600">
+          사용 가이드
+        </Link>
+      </header>
+      <section className="pb-7 pt-10">
+        <p className="flex items-center gap-2 text-xs font-medium text-brand">
+          <span className="h-1.5 w-1.5 rounded-full bg-brand" />
+          무료로, 로그인 없이
+        </p>
+        <h1 className="mt-4 text-[34px] font-bold leading-[1.3] tracking-tight">
+          내 팔로우 관계,
+          <br />
+          <span className="text-brand">한눈에 깔끔하게.</span>
+        </h1>
+        <p className="mt-4 text-sm leading-7 text-slate-600">
+          인스타그램 데이터를 올리면
+          <br />
+          맞팔 목록과 팔로워 변화를 정리해드려요.
+        </p>
+        <Link
+          href="/upload"
+          className="mt-6 flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-brand px-5 py-4 font-semibold text-white transition hover:brightness-110"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-[11.5px] font-medium text-white/75 mb-5">
-            <Sparkles size={12} className="text-ig-pink" />
-            v1.0 · 100% 무료 · 광고 없음
-          </div>
-
-          <h1 className="text-[40px] leading-[1.05] font-bold tracking-tight">
-            나를 안 따르는 사람,
-            <br />
-            <span className="ig-text">한 번에 보세요.</span>
-          </h1>
-
-          <p className="mt-4 text-[15px] leading-relaxed text-white/65">
-            인스타그램에서 받은 데이터 JSON 두 개만 올리면, 언팔러 · 맞팔 · 변화 추이를 즉시 분석합니다.
-            <br />
-            모든 처리는 당신의 브라우저 안에서만 일어납니다.
-          </p>
-
-          <div className="mt-7 flex gap-3">
-            <Link href="/upload" className="flex-1">
-              <GradientButton size="lg" className="w-full">
-                지금 분석하기 <ArrowRight size={18} />
-              </GradientButton>
-            </Link>
-            <Link href="/guide">
-              <GradientButton size="lg" variant="ghost">
-                다운로드 방법
-              </GradientButton>
-            </Link>
-          </div>
-
-          {/* 프라이버시 카드 */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="mt-6 glass-strong rounded-2xl p-4 flex items-start gap-3"
-          >
-            <div className="grid place-items-center w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-300 shrink-0">
-              <ShieldCheck size={18} />
-            </div>
-            <div className="text-[13px] leading-relaxed">
-              <p className="font-semibold">내 데이터는 어디로도 전송되지 않습니다.</p>
-              <p className="text-white/55">
-                업로드한 JSON은 서버에 저장되지 않고, 분석은 모두 당신의 기기에서만 진행됩니다.
-              </p>
-            </div>
-          </motion.div>
-        </motion.div>
+          내 데이터 분석하기 <ArrowRight size={18} />
+        </Link>
+        <Link
+          href="/guide"
+          className="mt-3 flex min-h-11 items-center justify-center gap-1 text-sm text-slate-600"
+        >
+          파일이 처음이라면? <span className="font-semibold text-brand">다운로드 방법</span>
+          <ArrowRight size={14} />
+        </Link>
       </section>
-
-      {/* 기능 카드 */}
-      <section className="px-5 pb-10">
-        <div className="mx-auto max-w-md">
-          <h2 className="text-sm font-semibold text-white/55 uppercase tracking-widest mb-4">
-            무엇을 알 수 있나요
-          </h2>
-          <div className="grid grid-cols-2 gap-3">
-            {features.map(({ icon: Icon, title, desc }, i) => (
-              <motion.div
-                key={title}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.05 * i }}
-              >
-                <GlassCard className="p-4 h-full">
-                  <Icon size={20} className="text-ig-pink" />
-                  <p className="mt-3 text-[14px] font-semibold">{title}</p>
-                  <p className="mt-1 text-[12.5px] text-white/55 leading-relaxed">{desc}</p>
-                </GlassCard>
-              </motion.div>
-            ))}
-          </div>
+      <InstallGuide />
+      <section className="mt-8" aria-labelledby="features">
+        <h2 id="features" className="mb-4 text-sm font-semibold">
+          필요한 정보만, 간단하게
+        </h2>
+        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+          {features.map(({ icon: Icon, title, body }) => (
+            <article
+              key={title}
+              className="flex items-center gap-4 border-b border-slate-100 p-5 last:border-0"
+            >
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-slate-50 text-brand">
+                <Icon size={20} />
+              </span>
+              <div>
+                <h3 className="text-sm font-semibold">{title}</h3>
+                <p className="mt-1 text-xs leading-relaxed text-slate-600">{body}</p>
+              </div>
+            </article>
+          ))}
         </div>
       </section>
-
-      {/* 사용 흐름 */}
-      <section className="px-5 pb-12">
-        <div className="mx-auto max-w-md">
-          <GlassCard>
-            <h2 className="text-sm font-semibold text-white/55 uppercase tracking-widest">
-              3단계로 끝
-            </h2>
-            <ol className="mt-4 space-y-4">
-              {[
-                ['인스타그램 데이터 다운로드 요청', 'JSON 형식으로 신청, 메일로 받음'],
-                ['JSON 두 개 업로드', 'following.json + followers_1.json'],
-                ['결과 확인', '언팔러 · 맞팔 · 통계가 즉시 표시'],
-              ].map(([t, d], i) => (
-                <li key={t} className="flex gap-4">
-                  <div className="grid place-items-center w-7 h-7 shrink-0 rounded-full ig-border text-xs font-bold ig-text">
-                    {i + 1}
-                  </div>
-                  <div>
-                    <p className="text-[14px] font-semibold">{t}</p>
-                    <p className="text-[12.5px] text-white/55 mt-0.5">{d}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-            <Link href="/guide" className="block mt-5">
-              <GradientButton variant="outline" size="md" className="w-full">
-                자세한 다운로드 가이드 보기
-              </GradientButton>
-            </Link>
-          </GlassCard>
-        </div>
-      </section>
+      <div className="mt-6 flex gap-2 px-1">
+        <ShieldCheck size={18} className="shrink-0 text-emerald-700" />
+        <p className="text-xs leading-relaxed text-slate-600">
+          파일은 이 기기에서만 분석해요. 비밀번호를 요구하지 않고, 기록은 저장을 선택할 때만
+          브라우저에 보관합니다.
+        </p>
+      </div>
+      <p className="mt-6 text-xs leading-relaxed text-slate-600">
+        현재 맞팔 여부만으로 과거의 언팔을 알 수는 없습니다. 기록에서 계정이 사라지는 원인에는
+        아이디 변경·삭제·비활성화도 있습니다. Instagram 또는 Meta와 제휴한 서비스가 아닙니다.
+      </p>
+      <footer className="mt-5 flex gap-5 text-xs text-slate-600">
+        <Link className="underline underline-offset-4" href="/privacy">
+          데이터 처리 안내
+        </Link>
+        <a
+          className="underline underline-offset-4"
+          href="https://github.com/jonghyun0000/Find-Unfollow2.1/issues"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          문제 제보 (새 탭)
+        </a>
+      </footer>
     </div>
   );
 }

@@ -1,17 +1,15 @@
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
-  content: [
-    './app/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-  ],
+  content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}'],
   theme: {
     extend: {
       colors: {
-        // 인스타 그라데이션 베이스
+        brand: '#6554C0',
+        // Accent palette
         ig: {
           purple: '#833AB4',
-          pink: '#E1306C',
+          pink: '#6554C0',
           orange: '#F77737',
           yellow: '#FCAF45',
         },
@@ -30,7 +28,14 @@ const config: Config = {
         },
       },
       fontFamily: {
-        display: ['"Pretendard Variable"', 'Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+        display: [
+          '"Pretendard Variable"',
+          'Pretendard',
+          '-apple-system',
+          'BlinkMacSystemFont',
+          'system-ui',
+          'sans-serif',
+        ],
         body: ['"Pretendard Variable"', 'Pretendard', '-apple-system', 'system-ui', 'sans-serif'],
         mono: ['"SF Mono"', 'JetBrains Mono', 'ui-monospace', 'monospace'],
       },
@@ -43,9 +48,8 @@ const config: Config = {
           'radial-gradient(at 20% 10%, rgba(168,85,247,0.25) 0px, transparent 50%), radial-gradient(at 80% 0%, rgba(236,72,153,0.22) 0px, transparent 45%), radial-gradient(at 50% 100%, rgba(131,58,180,0.18) 0px, transparent 55%)',
       },
       boxShadow: {
-        glass:
-          '0 8px 32px 0 rgba(31, 28, 46, 0.45), inset 0 1px 0 0 rgba(255,255,255,0.06)',
-        glow: '0 0 40px rgba(236,72,153,0.35)',
+        glass: '0 2px 8px rgba(30, 41, 59, 0.03)',
+        glow: '0 2px 4px rgba(101,84,192,0.12)',
       },
       backdropBlur: {
         xs: '2px',

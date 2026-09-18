@@ -1,96 +1,91 @@
-// store/useAnalysisStore.ts
-// 전역 분석 결과 상태. localStorage 와 동기화된다.
-// 페이지 간 이동 시 다시 분석하지 않도록 메모리에 유지.
-
 'use client';
-
 import { create } from 'zustand';
 import type { AnalysisResult, DiffResult } from '@/types';
-import { loadHistory, loadLatest, loadPrevious, saveAnalysis, clearAll, deleteOne } from '@/lib/storage';
-import { diff } from '@/lib/analyzer';
+import { loadHistory, saveAnalysis, clearAll, deleteOne } from '@/lib/storage';
+import { diff, previousFor } from '@/lib/analyzer';
 
 interface AnalysisStore {
-  // 데이터
   current: AnalysisResult | null;
   previous: AnalysisResult | null;
   history: AnalysisResult[];
   diffResult: DiffResult | null;
-
-  // 액션
-  hydrate: () => void;
-  setCurrent: (result: AnalysisResult, options?: { persist?: boolean }) => void;
-  resetAll: () => void;
-  removeFromHistory: (id: string) => void;
+  hydrated: boolean;
+  warning: string | null;
+  hydrate: () => Promise<void>;
+  setCurrent: (result: AnalysisResult, options?: { persist?: boolean }) => Promise<void>;
+  resetAll: () => Promise<void>;
+  removeFromHistory: (id: string) => Promise<void>;
   loadFromHistory: (id: string) => void;
 }
-
+function selection(current: AnalysisResult | null, history: AnalysisResult[]) {
+  const previous = current ? previousFor(history, current) : null;
+  return { current, previous, diffResult: current ? diff(previous, current) : null };
+}
+let hydration: Promise<void> | null = null;
 export const useAnalysisStore = create<AnalysisStore>((set, get) => ({
   current: null,
   previous: null,
   history: [],
   diffResult: null,
-
-  /**
-   * 첫 페이지 마운트 시 호출. localStorage에 있던 분석 기록을 메모리로 끌어올림.
-   */
+  hydrated: false,
+  warning: null,
   hydrate: () => {
-    const history = loadHistory();
-    const current = loadLatest();
-    const previous = loadPrevious();
-    set({
-      history,
-      current,
-      previous,
-      diffResult: current ? diff(previous, current) : null,
-    });
+    if (get().hydrated) return Promise.resolve();
+    if (hydration) return hydration;
+    hydration = (async () => {
+      try {
+        const { history, warning } = await loadHistory();
+        set({ history, warning, ...selection(history[0] ?? null, history), hydrated: true });
+      } catch {
+        set({
+          hydrated: true,
+          warning:
+            '이 브라우저에서는 기록을 읽을 수 없습니다. 파일 분석은 계속 사용할 수 있습니다.',
+        });
+      } finally {
+        hydration = null;
+      }
+    })();
+    return hydration;
   },
-
-  /**
-   * 새 분석 결과를 저장. (옵션) localStorage에도 영구 저장.
-   */
-  setCurrent: (result, options = { persist: true }) => {
-    const previous = loadLatest(); // 직전 최신을 "이전"으로
-    if (options.persist !== false) {
-      saveAnalysis(result);
+  setCurrent: async (result, options) => {
+    await get().hydrate();
+    let history = get().history;
+    let warning: string | null = null;
+    if (options?.persist && !result.isSample) {
+      try {
+        await saveAnalysis(result);
+        ({ history, warning } = await loadHistory());
+      } catch {
+        warning =
+          '기록을 저장하지 못했습니다. 결과는 현재 화면에서 볼 수 있지만 새로고침하면 사라집니다. 저장 공간과 브라우저 설정을 확인해주세요.';
+      }
     }
-    const history = options.persist !== false ? loadHistory() : [result, ...get().history].slice(0, 10);
-    set({
-      current: result,
-      previous,
-      history,
-      diffResult: diff(previous, result),
-    });
+    set({ history, warning, ...selection(result, history) });
   },
-
-  resetAll: () => {
-    clearAll();
-    set({ current: null, previous: null, history: [], diffResult: null });
+  resetAll: async () => {
+    try {
+      await clearAll();
+      set({ history: [], warning: null, ...selection(null, []) });
+    } catch {
+      set({
+        warning: '기록을 모두 삭제하지 못했습니다. 브라우저의 사이트 데이터 설정에서 삭제해주세요.',
+      });
+    }
   },
-
-  removeFromHistory: (id) => {
-    deleteOne(id);
-    const history = loadHistory();
-    const current = loadLatest();
-    const previous = loadPrevious();
-    set({
-      history,
-      current,
-      previous,
-      diffResult: current ? diff(previous, current) : null,
-    });
+  removeFromHistory: async (id) => {
+    try {
+      await deleteOne(id);
+      const { history, warning } = await loadHistory();
+      const current = get().current?.id === id ? (history[0] ?? null) : get().current;
+      set({ history, warning, ...selection(current, history) });
+    } catch {
+      set({ warning: '기록을 삭제하지 못했습니다. 다시 시도해주세요.' });
+    }
   },
-
   loadFromHistory: (id) => {
-    const target = get().history.find((h) => h.id === id);
-    if (!target) return;
-    set({
-      current: target,
-      // history 상에서의 직전 항목을 previous로 사용
-      previous: get().history[get().history.findIndex((h) => h.id === id) + 1] ?? null,
-      diffResult: diff(
-        get().history[get().history.findIndex((h) => h.id === id) + 1] ?? null,
-        target,
-      ),
-    });
+    const history = get().history;
+    const current = history.find((h) => h.id === id);
+    if (current) set(selection(current, history));
   },
 }));
