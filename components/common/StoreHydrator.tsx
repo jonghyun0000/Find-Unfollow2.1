@@ -14,7 +14,7 @@ export function StoreHydrator() {
       {warning && (
         <p
           role="alert"
-          className="my-3 rounded-xl border border-amber-400/30 bg-amber-500/10 p-4 text-sm text-amber-100"
+          className="my-3 rounded-xl border border-amber-400/30 bg-amber-500/10 p-4 text-sm text-amber-700"
         >
           {warning}
         </p>

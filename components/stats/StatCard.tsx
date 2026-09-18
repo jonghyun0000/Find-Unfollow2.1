@@ -16,9 +16,9 @@ interface Props {
 const accents = {
   pink: 'from-ig-pink/30 to-transparent text-ig-pink',
   purple: 'from-accent-purple/30 to-transparent text-accent-purple',
-  amber: 'from-amber-500/25 to-transparent text-amber-300',
-  emerald: 'from-emerald-500/25 to-transparent text-emerald-300',
-  rose: 'from-rose-500/25 to-transparent text-rose-300',
+  amber: 'from-amber-500/25 to-transparent text-amber-700',
+  emerald: 'from-emerald-500/25 to-transparent text-emerald-700',
+  rose: 'from-rose-500/25 to-transparent text-rose-700',
 };
 
 export function StatCard({ label, value, delta, icon, accent = 'pink', className }: Props) {
@@ -39,7 +39,7 @@ export function StatCard({ label, value, delta, icon, accent = 'pink', className
       />
       <div className="relative flex items-start justify-between">
         <div>
-          <p className="text-[12.5px] uppercase tracking-wider text-white/55 font-medium">
+          <p className="text-[12.5px] uppercase tracking-wider text-slate-600 font-medium">
             {label}
           </p>
           <p className="mt-2 text-3xl font-bold tracking-tight">{value}</p>
@@ -48,17 +48,17 @@ export function StatCard({ label, value, delta, icon, accent = 'pink', className
               className={cn(
                 'mt-1 text-xs font-semibold',
                 (delta ?? 0) > 0
-                  ? 'text-emerald-300'
+                  ? 'text-emerald-700'
                   : (delta ?? 0) < 0
-                    ? 'text-rose-300'
-                    : 'text-white/50',
+                    ? 'text-rose-700'
+                    : 'text-slate-600',
               )}
             >
               {deltaText} 지난 분석 대비
             </p>
           )}
         </div>
-        {icon && <div className="text-white/70">{icon}</div>}
+        {icon && <div className="text-slate-600">{icon}</div>}
       </div>
     </motion.div>
   );

@@ -7,7 +7,7 @@ export function UserCard({ user, badge }: { user: InstaUser; badge?: string }) {
     <li className="glass rounded-2xl p-4 flex items-center gap-3">
       <span
         aria-hidden
-        className="grid place-items-center size-10 shrink-0 rounded-full bg-ig-gradient text-white font-semibold"
+        className="grid place-items-center size-10 shrink-0 rounded-full bg-brand text-white font-semibold"
       >
         {user.username[0].toUpperCase()}
       </span>
@@ -21,7 +21,7 @@ export function UserCard({ user, badge }: { user: InstaUser; badge?: string }) {
         <ExternalLink className="inline ml-1.5" size={12} aria-hidden />
         <span className="sr-only"> (인스타그램, 새 탭)</span>
       </a>
-      {badge && <span className="text-xs text-white/65 shrink-0">{badge}</span>}
+      {badge && <span className="text-xs text-slate-600 shrink-0">{badge}</span>}
     </li>
   );
 }
@@ -39,17 +39,17 @@ export function UserList({ users, badge }: { users: InstaUser[]; badge?: string 
       {pageCount > 1 && (
         <nav aria-label="결과 페이지" className="flex items-center justify-between gap-3 pt-4">
           <button
-            className="rounded-xl bg-white/10 p-3 text-sm disabled:opacity-30"
+            className="rounded-xl bg-slate-100 p-3 text-sm disabled:opacity-30"
             disabled={current === 0}
             onClick={() => setPage(current - 1)}
           >
             이전
           </button>
-          <span aria-live="polite" className="text-sm text-white/70">
+          <span aria-live="polite" className="text-sm text-slate-600">
             {current + 1} / {pageCount} 페이지
           </span>
           <button
-            className="rounded-xl bg-white/10 p-3 text-sm disabled:opacity-30"
+            className="rounded-xl bg-slate-100 p-3 text-sm disabled:opacity-30"
             disabled={current === pageCount - 1}
             onClick={() => setPage(current + 1)}
           >

@@ -11,7 +11,7 @@ export function ResultEmpty({ hydrated }: { hydrated: boolean }) {
           ctaHref="/upload"
         />
       ) : (
-        <p role="status" className="py-12 text-center text-white/65">
+        <p role="status" className="py-12 text-center text-slate-600">
           이 기기의 기록을 불러오는 중…
         </p>
       )}

@@ -21,7 +21,7 @@ export function LoadingSpinner({ size = 64, label }: { size?: number; label?: st
           }}
         />
       </motion.div>
-      {label && <p className="text-sm text-white/60">{label}</p>}
+      {label && <p className="text-sm text-slate-600">{label}</p>}
     </div>
   );
 }

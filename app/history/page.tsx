@@ -25,14 +25,14 @@ export default function HistoryPage() {
             <h2 className="font-semibold break-all">
               {h.account ? '@' + h.account : '이전 버전 기록 (비교 제외)'}
             </h2>
-            <p className="mt-1 text-sm text-white/70">데이터 기준일 {h.snapshotDate}</p>
-            <p className="mt-1 text-xs text-white/60">
+            <p className="mt-1 text-sm text-slate-600">데이터 기준일 {h.snapshotDate}</p>
+            <p className="mt-1 text-xs text-slate-600">
               팔로워 {h.followers.length.toLocaleString()} · 팔로잉{' '}
               {h.following.length.toLocaleString()}
             </p>
             <div className="mt-3 flex gap-3">
               <button
-                className="rounded-xl bg-white/10 px-4 py-3 text-sm"
+                className="rounded-xl bg-slate-100 px-4 py-3 text-sm"
                 onClick={() => {
                   loadFromHistory(h.id);
                   router.push('/dashboard');
@@ -42,19 +42,19 @@ export default function HistoryPage() {
               </button>
               <button
                 disabled={pending}
-                className="rounded-xl border border-rose-400/30 px-4 py-3 text-sm text-rose-200"
+                className="rounded-xl border border-rose-400/30 px-4 py-3 text-sm text-rose-700"
                 onClick={() => setConfirm(h.id)}
               >
                 삭제
               </button>
             </div>
             {confirm === h.id && (
-              <div className="mt-3 border-t border-white/10 pt-3">
-                <p className="text-sm text-white/70">이 기록을 삭제할까요? 복구할 수 없습니다.</p>
+              <div className="mt-3 border-t border-slate-200 pt-3">
+                <p className="text-sm text-slate-600">이 기록을 삭제할까요? 복구할 수 없습니다.</p>
                 <div className="flex gap-3 mt-2">
                   <button
                     disabled={pending}
-                    className="rounded-xl bg-rose-500 px-4 py-3 text-sm"
+                    className="rounded-xl bg-rose-700 text-white px-4 py-3 text-sm"
                     onClick={async () => {
                       setPending(true);
                       await removeFromHistory(h.id);

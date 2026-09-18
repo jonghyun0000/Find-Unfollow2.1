@@ -26,12 +26,12 @@ export function DropZone({ files, onFilesChange }: Props) {
         }}
         className={cn(
           'block cursor-pointer rounded-3xl p-6 border-2 border-dashed text-center',
-          hover ? 'border-ig-pink bg-ig-soft' : 'border-white/25 bg-white/5',
+          hover ? 'border-ig-pink bg-ig-soft' : 'border-slate-200 bg-slate-100',
         )}
       >
         <Upload className="mx-auto mb-3 text-ig-pink" aria-hidden />
         <span className="font-semibold">JSON 파일 선택</span>
-        <span className="block text-sm text-white/65 mt-2">
+        <span className="block text-sm text-slate-600 mt-2">
           following.json과 모든 followers 파일을 함께 선택하거나 끌어놓으세요.
         </span>
         <input
@@ -39,7 +39,7 @@ export function DropZone({ files, onFilesChange }: Props) {
           type="file"
           multiple
           accept=".json,application/json"
-          className="mt-4 block w-full text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-white/10 file:px-3 file:py-2 file:text-white"
+          className="mt-4 block w-full text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-slate-100 file:px-3 file:py-2 file:text-slate-900"
           onChange={(e) => {
             add(Array.from(e.target.files ?? []));
             e.target.value = '';
@@ -51,15 +51,15 @@ export function DropZone({ files, onFilesChange }: Props) {
           {files.map((file, i) => (
             <li
               key={`${file.name}-${i}`}
-              className="flex items-center gap-2 rounded-xl bg-white/5 p-3 text-sm"
+              className="flex items-center gap-2 rounded-xl bg-slate-100 p-3 text-sm"
             >
               <span className="min-w-0 flex-1 break-all">
                 {file.name}{' '}
-                <span className="text-white/55">({(file.size / 1024).toFixed(0)}KB)</span>
+                <span className="text-slate-600">({(file.size / 1024).toFixed(0)}KB)</span>
               </span>
               <button
                 type="button"
-                className="p-3 rounded-lg hover:bg-white/10"
+                className="p-3 rounded-lg hover:bg-slate-100"
                 aria-label={`${file.name} 제거`}
                 onClick={() => onFilesChange(files.filter((_, j) => i !== j))}
               >

@@ -1,6 +1,5 @@
 // app/layout.tsx
 // 모든 페이지의 공통 레이아웃. PWA 메타, 하단 네비.
-// (다크 전용 앱이라 테마 토글 없음)
 
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
@@ -17,7 +16,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     title: 'Unfollow Lens',
-    statusBarStyle: 'black-translucent',
+    statusBarStyle: 'default',
   },
   icons: {
     icon: '/icons/icon-192.svg',
@@ -30,13 +29,13 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-  themeColor: '#08070D',
+  themeColor: '#F7F8FA',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko" className="dark">
-      <body className="min-h-screen bg-mesh-dark bg-fixed antialiased">
+    <html lang="ko">
+      <body className="min-h-screen antialiased">
         <a href="#main-content" className="sr-only focus:not-sr-only focus:block focus:p-4">
           본문으로 건너뛰기
         </a>

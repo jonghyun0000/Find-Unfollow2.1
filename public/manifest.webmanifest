@@ -5,14 +5,10 @@
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#08070D",
-  "theme_color": "#08070D",
+  "background_color": "#F7F8FA",
+  "theme_color": "#F7F8FA",
   "lang": "ko",
-  "categories": [
-    "social",
-    "utilities",
-    "productivity"
-  ],
+  "categories": ["social", "utilities", "productivity"],
   "icons": [
     {
       "src": "/icons/icon-192.png",

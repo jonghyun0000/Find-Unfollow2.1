@@ -21,9 +21,9 @@ const sizes: Record<NonNullable<Props['size']>, string> = {
 
 const variants: Record<Variant, string> = {
   gradient:
-    'bg-ig-gradient text-white font-semibold shadow-glow hover:brightness-110 active:brightness-95',
-  ghost: 'bg-white/5 hover:bg-white/10 text-white/90 backdrop-blur-md border border-white/10',
-  outline: 'ig-border text-white hover:bg-white/5',
+    'bg-brand text-white font-semibold shadow-glow hover:brightness-110 active:brightness-95',
+  ghost: 'bg-slate-100 hover:bg-slate-100 text-slate-600 backdrop-blur-md border border-slate-200',
+  outline: 'ig-border text-slate-900 hover:bg-slate-100',
 };
 
 export const GradientButton = forwardRef<HTMLButtonElement, Props>(function GradientButton(
@@ -46,7 +46,7 @@ export const GradientButton = forwardRef<HTMLButtonElement, Props>(function Grad
       {...(rest as React.ComponentProps<typeof motion.button>)}
     >
       {loading && (
-        <span className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+        <span className="w-4 h-4 rounded-full border-2 border-slate-200 border-t-brand animate-spin" />
       )}
       {children}
     </motion.button>

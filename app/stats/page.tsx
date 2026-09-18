@@ -8,7 +8,7 @@ const FollowerChart = dynamic(
   () => import('@/components/stats/FollowerChart').then((m) => m.FollowerChart),
   {
     ssr: false,
-    loading: () => <p className="py-10 text-center text-white/60">차트 불러오는 중…</p>,
+    loading: () => <p className="py-10 text-center text-slate-600">차트 불러오는 중…</p>,
   },
 );
 export default function StatsPage() {
@@ -33,7 +33,7 @@ export default function StatsPage() {
           {records.length >= 2 ? (
             <FollowerChart history={records} />
           ) : (
-            <p className="py-8 text-sm text-white/65">
+            <p className="py-8 text-sm text-slate-600">
               같은 계정의 서로 다른 기준일 기록을 2개 이상 저장하면 차트가 표시됩니다.
             </p>
           )}
@@ -47,7 +47,7 @@ export default function StatsPage() {
               ['내가 안 따름', current.fans.length],
             ].map(([label, count]) => (
               <div key={label} className="flex justify-between text-sm">
-                <dt className="text-white/65">{label}</dt>
+                <dt className="text-slate-600">{label}</dt>
                 <dd className="font-semibold">{Number(count).toLocaleString()}명</dd>
               </div>
             ))}
@@ -69,7 +69,7 @@ export default function StatsPage() {
               </thead>
               <tbody>
                 {records.map((h) => (
-                  <tr key={h.id} className="border-t border-white/10">
+                  <tr key={h.id} className="border-t border-slate-200">
                     <th scope="row" className="py-3 font-normal">
                       {h.snapshotDate}
                     </th>

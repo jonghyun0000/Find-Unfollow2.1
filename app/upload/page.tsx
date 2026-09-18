@@ -100,7 +100,7 @@ export default function UploadPage() {
       <PageHeader title="데이터 분석" subtitle="내보내기 파일을 이 기기에서만 읽습니다" back />
       <form onSubmit={runAnalysis} className="mx-auto max-w-md px-5 py-6 space-y-5">
         <PrivacyBadge />
-        <p className="text-sm text-white/65">
+        <p className="text-sm text-slate-600">
           ZIP 압축을 풀어 <b>following.json 1개</b>와{' '}
           <b>followers_1.json, followers_2.json 등 모든 팔로워 파일</b>을 선택해주세요. 파일당 20MB,
           전체 50MB까지 가능합니다.
@@ -127,7 +127,7 @@ export default function UploadPage() {
               placeholder="예: jonghyun0000"
               className="field mt-2"
             />
-            <span className="block mt-2 text-xs text-white/60">
+            <span className="block mt-2 text-xs text-slate-600">
               로그인에 사용하지 않습니다. 다른 계정의 기록과 섞이지 않도록 구분합니다.
             </span>
           </label>
@@ -141,7 +141,7 @@ export default function UploadPage() {
               onChange={(e) => setSnapshotDate(e.target.value)}
               className="field mt-2"
             />
-            <span className="block mt-2 text-xs text-white/60">
+            <span className="block mt-2 text-xs text-slate-600">
               인스타그램에서 이 데이터를 생성한 날짜입니다. 같은 계정·날짜로 저장하면 기존 기록을
               교체합니다.
             </span>
@@ -155,7 +155,7 @@ export default function UploadPage() {
             />
             전체 기간으로 요청한 같은 계정의 파일이며, 모든 팔로워 파일을 선택했습니다.
           </label>
-          <p className="text-xs text-white/60">
+          <p className="text-xs text-slate-600">
             파일 일부가 빠지거나 다른 기준일의 파일이 섞이면 결과가 틀릴 수 있습니다. 마지막 분할
             파일 누락은 앱이 자동으로 확인할 수 없습니다.
           </p>
@@ -173,7 +173,7 @@ export default function UploadPage() {
           <p
             role="alert"
             aria-label="파일 분석 오류"
-            className="rounded-2xl border border-rose-400/40 bg-rose-500/10 p-4 text-sm text-rose-200"
+            className="rounded-2xl border border-rose-400/40 bg-rose-500/10 p-4 text-sm text-rose-700"
           >
             {error}
           </p>
@@ -190,7 +190,7 @@ export default function UploadPage() {
         {running && (
           <button
             type="button"
-            className="w-full p-3 text-sm text-white/70"
+            className="w-full p-3 text-sm text-slate-600"
             onClick={() => {
               request.current++;
               worker.current?.terminate();

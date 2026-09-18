@@ -17,7 +17,7 @@ export default function DashboardPage() {
       />
       <div className="mx-auto max-w-md px-5 py-5 space-y-5">
         {!current.isSample && !history.some((h) => h.id === current.id) && (
-          <p className="text-sm text-white/65">
+          <p className="text-sm text-slate-600">
             이 결과는 저장되지 않았습니다. 새로고침하거나 앱을 닫으면 사라집니다.
           </p>
         )}
@@ -47,7 +47,7 @@ export default function DashboardPage() {
             accent="emerald"
           />
         </div>
-        <p className="text-sm text-white/65 leading-relaxed">
+        <p className="text-sm text-slate-600 leading-relaxed">
           ‘나를 안 따름’은 현재 맞팔하지 않는 계정입니다. 과거에 팔로우했다가 해제했는지는 한 번의
           데이터로 알 수 없습니다.
         </p>
@@ -63,7 +63,7 @@ export default function DashboardPage() {
             <GlassCard className="flex items-center justify-between gap-3">
               <div>
                 <p className="font-semibold">{title}</p>
-                <p className="mt-1 text-sm text-white/60">{desc}</p>
+                <p className="mt-1 text-sm text-slate-600">{desc}</p>
               </div>
               <ArrowRight size={18} />
             </GlassCard>
@@ -73,47 +73,47 @@ export default function DashboardPage() {
           <h2 className="font-semibold text-lg">이전 기록과 비교</h2>
           {previous ? (
             <>
-              <p className="text-sm text-white/60 mt-2">
+              <p className="text-sm text-slate-600 mt-2">
                 {previous.snapshotDate} → {current.snapshotDate}
               </p>
               <div className="grid grid-cols-2 gap-3 my-4">
                 <div>
-                  <p className="text-sm text-white/60">사라진 팔로워</p>
-                  <p className="text-2xl font-bold text-rose-300">
+                  <p className="text-sm text-slate-600">사라진 팔로워</p>
+                  <p className="text-2xl font-bold text-rose-700">
                     {diffResult?.lostFollowers.length ?? 0}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-white/60">새 팔로워</p>
-                  <p className="text-2xl font-bold text-emerald-300">
+                  <p className="text-sm text-slate-600">새 팔로워</p>
+                  <p className="text-2xl font-bold text-emerald-700">
                     {diffResult?.newFollowers.length ?? 0}
                   </p>
                 </div>
               </div>
               <Link
                 href="/changes"
-                className="inline-flex rounded-xl bg-white/10 p-3 text-sm font-semibold"
+                className="inline-flex rounded-xl bg-slate-100 p-3 text-sm font-semibold"
               >
                 변화 목록 전체 보기 →
               </Link>
             </>
           ) : (
-            <p className="mt-3 text-sm text-white/65 leading-relaxed">
+            <p className="mt-3 text-sm text-slate-600 leading-relaxed">
               비교할 이전 데이터가 없습니다. 같은 계정의 더 이전 기준일 기록이 필요합니다. 첫
               분석에서 ‘언팔 없음’을 판단하지 않습니다.
             </p>
           )}
-          <p className="mt-4 text-xs leading-relaxed text-white/55">
+          <p className="mt-4 text-xs leading-relaxed text-slate-600">
             계정 이름 변경·삭제·비활성화도 팔로워 감소로 나타날 수 있습니다. 결과는 내보내기 시점
             기준이며 실시간 정보가 아닙니다.
           </p>
         </GlassCard>
-        <Link href="/stats" className="block rounded-2xl bg-white/5 p-4 text-sm font-semibold">
+        <Link href="/stats" className="block rounded-2xl bg-slate-100 p-4 text-sm font-semibold">
           팔로워 변화 통계 →
         </Link>
         <Link
           href="/upload"
-          className="block rounded-2xl bg-ig-gradient p-4 text-center font-semibold"
+          className="block rounded-2xl bg-brand text-white p-4 text-center font-semibold"
         >
           새 데이터 분석하기
         </Link>

@@ -31,28 +31,28 @@ export default function GuidePage() {
           {steps.map(([title, body], i) => (
             <li className="glass rounded-2xl p-5" key={title}>
               <h2 className="font-semibold">
-                <span className="text-pink-300 mr-2">{i + 1}.</span>
+                <span className="text-pink-700 mr-2">{i + 1}.</span>
                 {title}
               </h2>
-              <p className="mt-2 text-sm leading-relaxed text-white/65">{body}</p>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">{body}</p>
             </li>
           ))}
         </ol>
         <div className="rounded-2xl border border-amber-400/30 bg-amber-500/10 p-5 text-sm leading-relaxed">
-          <h2 className="font-semibold text-amber-100">파일이 빠지면 결과가 달라집니다</h2>
-          <p className="mt-2 text-white/75">
+          <h2 className="font-semibold text-amber-700">파일이 빠지면 결과가 달라집니다</h2>
+          <p className="mt-2 text-slate-600">
             팔로워가 여러 파일로 나뉘었다면 1번 파일만으로 분석하지 마세요. 누락된 팔로워가 나를 안
             따르는 계정으로 표시됩니다. 서로 다른 계정이나 날짜의 파일을 섞지 마세요. 앱은 마지막
             파일 누락이나 계정 소유자를 자동으로 확인할 수 없습니다.
           </p>
         </div>
-        <p className="text-sm text-white/65">
+        <p className="text-sm text-slate-600">
           JSON만 지원합니다. HTML·ZIP 파일은 먼저 올바른 형식으로 준비해주세요. 파일당 20MB, 전체
           50MB, 최대 100개 파일, 팔로워와 팔로잉 각각 20만 명까지 처리합니다.
         </p>
         <Link
           href="/upload"
-          className="block rounded-2xl bg-ig-gradient p-4 text-center font-semibold"
+          className="block rounded-2xl bg-brand text-white p-4 text-center font-semibold"
         >
           파일 준비 완료, 분석하기
         </Link>

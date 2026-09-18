@@ -39,7 +39,7 @@ export function ServiceWorker() {
     <aside className="mx-auto max-w-md px-5 py-3 text-sm" role="status">
       새 버전을 사용할 수 있습니다. 저장하지 않은 결과는 새로고침하면 사라집니다.{' '}
       <button
-        className="mt-2 rounded-lg bg-white/10 p-3 font-semibold"
+        className="mt-2 rounded-lg bg-slate-100 p-3 font-semibold"
         onClick={() => update.waiting?.postMessage({ type: 'SKIP_WAITING' })}
       >
         새 버전으로 새로고침

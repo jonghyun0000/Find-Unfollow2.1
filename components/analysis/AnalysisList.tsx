@@ -53,13 +53,13 @@ function Inner({ mode }: { mode: 'relationships' | 'changes' | 'mutuals' }) {
               key={g.key}
               href={`${path}?group=${g.key}`}
               aria-current={g.key === selected.key ? 'page' : undefined}
-              className={`rounded-xl px-3 py-3 text-sm ${g.key === selected.key ? 'bg-ig-gradient font-semibold' : 'bg-white/5 text-white/75'}`}
+              className={`rounded-xl px-3 py-3 text-sm ${g.key === selected.key ? 'bg-brand text-white font-semibold' : 'bg-slate-100 text-slate-600'}`}
             >
               {g.label} {g.users.length.toLocaleString()}
             </Link>
           ))}
         </nav>
-        <p className="text-sm text-white/65 leading-relaxed">
+        <p className="text-sm text-slate-600 leading-relaxed">
           {mode === 'changes'
             ? previous
               ? `${previous.snapshotDate} → ${current.snapshotDate} 비교입니다. 계정 이름 변경·삭제·비활성화나 내보내기 범위 차이도 목록에서 사라지는 원인이 될 수 있습니다. 실제 언팔 행동을 확정하지 않습니다.`
@@ -80,7 +80,7 @@ function Inner({ mode }: { mode: 'relationships' | 'changes' | 'mutuals' }) {
           />
         </label>
         <div className="flex items-center justify-between gap-3">
-          <p aria-live="polite" className="text-sm text-white/70">
+          <p aria-live="polite" className="text-sm text-slate-600">
             {list.length.toLocaleString()}명
           </p>
           <GradientButton
@@ -100,7 +100,7 @@ function Inner({ mode }: { mode: 'relationships' | 'changes' | 'mutuals' }) {
         {list.length ? (
           <UserList key={`${current.id}-${selected.key}-${deferredQuery}`} users={list} />
         ) : (
-          <p className="glass rounded-2xl p-8 text-center text-sm text-white/65">
+          <p className="glass rounded-2xl p-8 text-center text-sm text-slate-600">
             {mode === 'changes' && !previous
               ? '이전 데이터가 필요합니다.'
               : '해당하는 계정이 없습니다.'}
