@@ -11,7 +11,7 @@ const items = [
   { href: '/', label: '홈', icon: Home },
   { href: '/upload', label: '업로드', icon: Upload },
   { href: '/dashboard', label: '대시보드', icon: BarChart3 },
-  { href: '/mutual', label: '맞팔', icon: Users2 },
+  { href: '/changes', label: '변화', icon: Users2 },
   { href: '/settings', label: '설정', icon: Settings },
 ] as const;
 
@@ -24,7 +24,7 @@ export function BottomNav() {
       className="fixed bottom-0 inset-x-0 z-40 px-3 pb-3"
       style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 12px)' }}
     >
-      <div className="glass-strong mx-auto max-w-md rounded-3xl px-2 py-2">
+      <div className="mx-auto max-w-md rounded-3xl border border-white/15 bg-ink-900/95 shadow-glass backdrop-blur-xl px-2 py-2">
         <ul className="grid grid-cols-5">
           {items.map(({ href, label, icon: Icon }) => {
             const active = pathname === href || (href !== '/' && pathname.startsWith(href));

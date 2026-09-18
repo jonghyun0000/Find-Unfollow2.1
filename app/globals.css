@@ -4,11 +4,10 @@
 @tailwind utilities;
 
 /* Pretendard - 한국어 모던 폰트 */
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css');
 
 :root {
-  --bg: #08070D;
-  --fg: #F5F3FA;
+  --bg: #08070d;
+  --fg: #f5f3fa;
   --muted: rgba(245, 243, 250, 0.55);
   --border: rgba(255, 255, 255, 0.08);
 }
@@ -17,10 +16,17 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-html, body {
+html,
+body {
   background: var(--bg);
   color: var(--fg);
-  font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-family:
+    'Pretendard Variable',
+    Pretendard,
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    sans-serif;
   font-feature-settings: 'cv11', 'ss01';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -45,8 +51,9 @@ body {
     @apply bg-ig-gradient bg-clip-text text-transparent;
   }
   .ig-border {
-    background: linear-gradient(var(--bg), var(--bg)) padding-box,
-                linear-gradient(135deg, #FCAF45, #E1306C, #833AB4) border-box;
+    background:
+      linear-gradient(var(--bg), var(--bg)) padding-box,
+      linear-gradient(135deg, #fcaf45, #e1306c, #833ab4) border-box;
     border: 1px solid transparent;
   }
   /* 스켈레톤 셀 */
@@ -56,14 +63,24 @@ body {
 }
 
 /* 스크롤바 */
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 999px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.16); }
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
 
 /* 포커스 링 */
 :focus-visible {
-  outline: 2px solid #EC4899;
+  outline: 2px solid #ec4899;
   outline-offset: 2px;
   border-radius: 8px;
 }
@@ -71,4 +88,25 @@ body {
 /* 모바일 네비게이션을 위한 본문 패딩 */
 .with-bottom-nav {
   padding-bottom: calc(env(safe-area-inset-bottom) + 88px);
+}
+
+.field {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  background: #15131f;
+  color: #f5f3fa;
+  color-scheme: dark;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

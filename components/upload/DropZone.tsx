@@ -1,88 +1,74 @@
-// components/upload/DropZone.tsx
 'use client';
-
-import { useCallback, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
-import { Upload, FileJson, X } from 'lucide-react';
+import { useId, useState } from 'react';
+import { Upload, X } from 'lucide-react';
 import { cn } from '@/lib/cn';
-
 interface Props {
-  label: string;
-  hint?: string;
-  file: File | null;
-  onFileChange: (file: File | null) => void;
-  accept?: string;
+  files: File[];
+  onFilesChange: (files: File[]) => void;
 }
-
-/**
- * 드래그앤드롭 + 클릭 업로드 모두 지원하는 단일 파일 입력.
- */
-export function DropZone({ label, hint, file, onFileChange, accept = '.json,application/json' }: Props) {
+export function DropZone({ files, onFilesChange }: Props) {
+  const id = useId();
   const [hover, setHover] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const handleDrop = useCallback(
-    (e: React.DragEvent<HTMLLabelElement>) => {
-      e.preventDefault();
-      setHover(false);
-      const f = e.dataTransfer.files?.[0];
-      if (f) onFileChange(f);
-    },
-    [onFileChange],
-  );
-
+  const add = (incoming: File[]) => onFilesChange([...files, ...incoming]);
   return (
-    <motion.label
-      whileHover={{ y: -2 }}
-      onDragOver={(e) => { e.preventDefault(); setHover(true); }}
-      onDragLeave={() => setHover(false)}
-      onDrop={handleDrop}
-      className={cn(
-        'block cursor-pointer rounded-3xl p-5 transition-all',
-        'border-2 border-dashed',
-        hover
-          ? 'border-ig-pink bg-ig-soft'
-          : file
-          ? 'border-emerald-500/40 bg-emerald-500/5'
-          : 'border-white/15 bg-white/[0.03] hover:border-white/30',
-      )}
-    >
-      <input
-        ref={inputRef}
-        type="file"
-        accept={accept}
-        className="sr-only"
-        onChange={(e) => onFileChange(e.target.files?.[0] ?? null)}
-      />
-
-      <div className="flex items-center gap-4">
-        <div
-          className={cn(
-            'grid place-items-center w-12 h-12 rounded-2xl shrink-0',
-            file ? 'bg-emerald-500/15 text-emerald-300' : 'bg-white/5 text-white/70',
-          )}
-        >
-          {file ? <FileJson size={22} /> : <Upload size={22} />}
-        </div>
-
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold">{label}</p>
-          <p className="text-[12.5px] text-white/55 truncate">
-            {file ? file.name : hint ?? 'JSON 파일을 드래그하거나 탭하여 선택'}
-          </p>
-        </div>
-
-        {file && (
-          <button
-            type="button"
-            onClick={(e) => { e.preventDefault(); onFileChange(null); }}
-            className="grid place-items-center w-9 h-9 rounded-full bg-white/5 hover:bg-white/10"
-            aria-label="파일 제거"
-          >
-            <X size={16} />
-          </button>
+    <div>
+      <label
+        htmlFor={id}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setHover(true);
+        }}
+        onDragLeave={() => setHover(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setHover(false);
+          add(Array.from(e.dataTransfer.files));
+        }}
+        className={cn(
+          'block cursor-pointer rounded-3xl p-6 border-2 border-dashed text-center',
+          hover ? 'border-ig-pink bg-ig-soft' : 'border-white/25 bg-white/5',
         )}
-      </div>
-    </motion.label>
+      >
+        <Upload className="mx-auto mb-3 text-ig-pink" aria-hidden />
+        <span className="font-semibold">JSON 파일 선택</span>
+        <span className="block text-sm text-white/65 mt-2">
+          following.json과 모든 followers 파일을 함께 선택하거나 끌어놓으세요.
+        </span>
+        <input
+          id={id}
+          type="file"
+          multiple
+          accept=".json,application/json"
+          className="mt-4 block w-full text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-white/10 file:px-3 file:py-2 file:text-white"
+          onChange={(e) => {
+            add(Array.from(e.target.files ?? []));
+            e.target.value = '';
+          }}
+        />
+      </label>
+      {files.length > 0 && (
+        <ul className="mt-3 space-y-2" aria-label="선택한 파일">
+          {files.map((file, i) => (
+            <li
+              key={`${file.name}-${i}`}
+              className="flex items-center gap-2 rounded-xl bg-white/5 p-3 text-sm"
+            >
+              <span className="min-w-0 flex-1 break-all">
+                {file.name}{' '}
+                <span className="text-white/55">({(file.size / 1024).toFixed(0)}KB)</span>
+              </span>
+              <button
+                type="button"
+                className="p-3 rounded-lg hover:bg-white/10"
+                aria-label={`${file.name} 제거`}
+                onClick={() => onFilesChange(files.filter((_, j) => i !== j))}
+              >
+                <X size={16} />
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
 }

@@ -1,126 +1,60 @@
-// app/guide/page.tsx — 인스타 데이터 다운로드 가이드
-'use client';
-
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { Smartphone, Globe, Download, Check, AlertTriangle, ArrowRight } from 'lucide-react';
 import { PageHeader } from '@/components/layout/PageHeader';
-import { GlassCard } from '@/components/ui/GlassCard';
-import { GradientButton } from '@/components/ui/GradientButton';
-import { PrivacyBadge } from '@/components/common/PrivacyBadge';
-
 const steps = [
-  {
-    title: '인스타그램 → 설정 진입',
-    desc: '프로필 → 우측 상단 메뉴(≡) → "내 활동" 또는 "Accounts Center" → "내 정보 및 권한"',
-  },
-  {
-    title: '"정보 다운로드" 선택',
-    desc: '"정보 다운로드" → "정보 다운로드 요청" 클릭',
-  },
-  {
-    title: '항목 / 형식 선택',
-    desc: '"일부 정보 선택" → "팔로워 및 팔로잉" 만 체크 → 형식은 반드시 JSON, 기간은 "전체 기간"',
-  },
-  {
-    title: '요청 후 이메일 대기',
-    desc: '인스타그램이 ZIP 파일을 메일로 보내줍니다. 보통 몇 분 ~ 몇 시간 소요',
-  },
-  {
-    title: 'ZIP 압축 풀기',
-    desc: 'ZIP 안 connections/followers_and_following/ 폴더에 두 파일이 있어요',
-  },
-  {
-    title: '두 파일 업로드',
-    desc: 'following.json + followers_1.json 을 이 앱에 그대로 업로드',
-  },
+  [
+    '내 정보 내보내기 열기',
+    '인스타그램 설정의 계정 센터에서 내 정보 및 권한 → 정보 다운로드 또는 내보내기를 찾으세요. 메뉴 이름은 앱 버전에 따라 다를 수 있습니다.',
+  ],
+  [
+    '같은 계정의 전체 기간 선택',
+    '분석할 계정을 선택하고 팔로워 및 팔로잉 항목을 요청하세요. 날짜 범위는 반드시 전체 기간, 파일 형식은 JSON으로 선택하세요.',
+  ],
+  [
+    '파일 준비 후 다운로드',
+    '인스타그램의 준비 완료 안내에 따라 파일을 기기에 내려받고 ZIP 압축을 풀어주세요. 준비 시간은 계정마다 다릅니다.',
+  ],
+  [
+    '모든 관계 파일 선택',
+    'connections/followers_and_following 폴더의 following.json과 followers_1.json, followers_2.json 등 모든 팔로워 파일을 함께 선택하세요.',
+  ],
+  [
+    '계정과 데이터 기준일 확인',
+    '내 아이디와 데이터가 생성된 날짜를 입력하세요. 이전 기록과 비교하려면 같은 아이디를 입력하고 이 기기에 기록 저장을 선택하세요.',
+  ],
 ];
-
 export default function GuidePage() {
   return (
     <>
       <PageHeader title="데이터 다운로드 방법" back />
-
-      <div className="mx-auto max-w-md px-5 py-5 space-y-4">
-        <PrivacyBadge />
-
-        <GlassCard>
-          <div className="flex gap-3 items-start">
-            <div className="grid place-items-center w-11 h-11 rounded-2xl bg-ig-soft text-ig-pink shrink-0">
-              <Download size={20} />
-            </div>
-            <div>
-              <h2 className="text-base font-semibold">인스타에서 JSON 받는 법</h2>
-              <p className="text-[12.5px] text-white/55 mt-1">
-                약 6단계, 평균 5~30분이면 받아볼 수 있어요.
-              </p>
-            </div>
-          </div>
-        </GlassCard>
-
-        <ol className="space-y-3">
-          {steps.map((s, i) => (
-            <motion.li
-              key={s.title}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.05 }}
-              className="glass rounded-2xl p-4 flex gap-3"
-            >
-              <div className="grid place-items-center w-8 h-8 rounded-full ig-border ig-text font-bold text-sm shrink-0">
-                {i + 1}
-              </div>
-              <div className="flex-1">
-                <p className="text-[14px] font-semibold">{s.title}</p>
-                <p className="text-[12.5px] text-white/55 mt-1 leading-relaxed">{s.desc}</p>
-              </div>
-            </motion.li>
+      <div className="mx-auto max-w-md px-5 py-6 space-y-5">
+        <ol className="space-y-4">
+          {steps.map(([title, body], i) => (
+            <li className="glass rounded-2xl p-5" key={title}>
+              <h2 className="font-semibold">
+                <span className="text-pink-300 mr-2">{i + 1}.</span>
+                {title}
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-white/65">{body}</p>
+            </li>
           ))}
         </ol>
-
-        {/* 팁 */}
-        <GlassCard>
-          <h3 className="text-sm font-semibold flex items-center gap-2">
-            <Check size={14} className="text-emerald-300" /> 꼭 확인하세요
-          </h3>
-          <ul className="mt-3 space-y-2 text-[13px] text-white/65">
-            <li className="flex gap-2"><span className="text-ig-pink">•</span> 형식은 <b className="text-white">반드시 JSON</b>이어야 합니다 (HTML 아님)</li>
-            <li className="flex gap-2"><span className="text-ig-pink">•</span> 항목은 "팔로워 및 팔로잉" 만 선택하면 충분해요</li>
-            <li className="flex gap-2"><span className="text-ig-pink">•</span> 팔로워가 많으면 followers_2.json, _3.json 식으로 나뉠 수 있어요. 1번 파일만 사용해도 분석은 가능합니다</li>
-          </ul>
-        </GlassCard>
-
-        {/* 경고 */}
-        <GlassCard className="border border-amber-500/20">
-          <div className="flex gap-3 items-start">
-            <div className="grid place-items-center w-9 h-9 rounded-xl bg-amber-500/15 text-amber-300 shrink-0">
-              <AlertTriangle size={16} />
-            </div>
-            <div className="text-[12.5px] text-white/65 leading-relaxed">
-              <b className="text-white">절대 다른 앱에 인스타 비밀번호를 입력하지 마세요.</b><br />
-              이 앱은 비밀번호도, 로그인도 요구하지 않습니다. 오직 당신이 직접 받은 JSON 파일만 사용해요.
-            </div>
-          </div>
-        </GlassCard>
-
-        {/* 플랫폼 */}
-        <div className="grid grid-cols-2 gap-3">
-          <GlassCard className="p-4 text-center">
-            <Smartphone size={20} className="mx-auto text-ig-pink" />
-            <p className="mt-2 text-[13px] font-semibold">앱에서</p>
-            <p className="text-[11.5px] text-white/55">iOS · Android</p>
-          </GlassCard>
-          <GlassCard className="p-4 text-center">
-            <Globe size={20} className="mx-auto text-accent-purple" />
-            <p className="mt-2 text-[13px] font-semibold">웹에서</p>
-            <p className="text-[11.5px] text-white/55">accountscenter.instagram.com</p>
-          </GlassCard>
+        <div className="rounded-2xl border border-amber-400/30 bg-amber-500/10 p-5 text-sm leading-relaxed">
+          <h2 className="font-semibold text-amber-100">파일이 빠지면 결과가 달라집니다</h2>
+          <p className="mt-2 text-white/75">
+            팔로워가 여러 파일로 나뉘었다면 1번 파일만으로 분석하지 마세요. 누락된 팔로워가 나를 안
+            따르는 계정으로 표시됩니다. 서로 다른 계정이나 날짜의 파일을 섞지 마세요. 앱은 마지막
+            파일 누락이나 계정 소유자를 자동으로 확인할 수 없습니다.
+          </p>
         </div>
-
-        <Link href="/upload" className="block">
-          <GradientButton size="lg" className="w-full">
-            준비 완료, 분석하기 <ArrowRight size={18} />
-          </GradientButton>
+        <p className="text-sm text-white/65">
+          JSON만 지원합니다. HTML·ZIP 파일은 먼저 올바른 형식으로 준비해주세요. 파일당 20MB, 전체
+          50MB, 최대 100개 파일, 팔로워와 팔로잉 각각 20만 명까지 처리합니다.
+        </p>
+        <Link
+          href="/upload"
+          className="block rounded-2xl bg-ig-gradient p-4 text-center font-semibold"
+        >
+          파일 준비 완료, 분석하기
         </Link>
       </div>
     </>

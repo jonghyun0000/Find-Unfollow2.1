@@ -12,10 +12,7 @@ interface Props {
 export function SearchBar({ value, onChange, placeholder = '아이디 검색' }: Props) {
   return (
     <div className="relative">
-      <Search
-        size={16}
-        className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40"
-      />
+      <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" />
       <input
         value={value}
         onChange={(e) => onChange(e.target.value)}

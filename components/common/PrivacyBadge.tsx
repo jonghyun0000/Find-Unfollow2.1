@@ -12,7 +12,7 @@ export function PrivacyBadge({ className }: { className?: string }) {
       )}
     >
       <ShieldCheck size={14} />
-      <span>내 데이터는 저장되지 않습니다 · 100% 브라우저 처리</span>
+      <span>파일은 서버로 전송되지 않습니다</span>
     </div>
   );
 }

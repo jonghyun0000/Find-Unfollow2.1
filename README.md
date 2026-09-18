@@ -1,225 +1,84 @@
-# Unfollow Lens · 인스타그램 언팔러 분석 PWA
+# Unfollow Lens 2.2
 
-> **모든 분석은 당신의 브라우저 안에서만 일어납니다. 서버 전송, 광고, 트래커 일체 없음.**
+인스타그램에서 내려받은 JSON 파일로 **현재 팔로우 관계**와 **두 기준일 사이의 변화**를 확인하는 한국어 PWA입니다. 파일 분석은 Web Worker에서 실행하며 파일 내용·계정 아이디·분석 결과를 서버로 전송하지 않습니다.
 
-Next.js 14 (App Router) + TypeScript + TailwindCSS + Framer Motion + Zustand + Recharts 로 만든 풀 PWA 입니다.
-인스타그램에서 받은 `following.json` / `followers_1.json` 두 파일을 업로드하면 즉시 분석합니다.
+## 사용자 흐름
 
----
+1. 인스타그램에서 **전체 기간 / JSON / 팔로워 및 팔로잉**을 요청합니다.
+2. ZIP 압축을 풀고 `following.json`과 `followers_1.json`, `followers_2.json` 등 **모든** 팔로워 파일을 선택합니다.
+3. 데이터의 소유 계정과 데이터 생성 기준일을 입력합니다. 앱은 소유 계정이나 마지막 분할 파일 누락을 자동으로 확인할 수 없으므로 사용자가 확인해야 합니다.
+4. 현재 맞팔/일방 팔로우를 확인하고 전체 결과를 검색·페이지 이동·CSV 다운로드합니다.
+5. **기록 저장을 선택한 경우에만** 브라우저 IndexedDB에 저장합니다. 같은 계정의 더 이전 기준일 기록이 있으면 새 팔로워와 사라진 팔로워를 비교합니다.
 
-## ✨ 주요 기능
+`following − followers`는 현재 나를 안 따르는 계정입니다. 이 결과만으로 과거 언팔을 알 수 없습니다. 기록에서 사라진 계정도 아이디 변경·삭제·비활성화일 수 있어 실제 언팔 행동을 확정하지 않습니다. 활동 여부와 공식 인증 여부는 추정하지 않습니다. Instagram/Meta와 제휴한 서비스가 아닙니다.
 
-- **언팔러 추적** : 내가 팔로우 했지만 나를 안 따르는 사람 (following − followers)
-- **외사랑 추적** : 나를 팔로우 하지만 내가 안 따른 사람 (followers − following)
-- **맞팔 친구만 모아보기**
-- **최근 언팔 / 새 팔로워 추적** (이전 분석과 비교)
-- **팔로워 변화 추이 차트** (Recharts)
-- **검색** · **CSV 다운로드** · **다크/라이트 모드**
-- **PWA** — 홈화면 추가 / 오프라인 지원 / 앱처럼 실행
-- **드래그앤드롭 파일 업로드**
-- **샘플 데이터로 즉시 체험 가능**
-- **분석 기록 자동 저장** (localStorage, 최대 10개)
+## 실행
 
-## 🎨 디자인
+Node.js 22.18 이상을 사용합니다 (`.nvmrc`: 22).
 
-- 보라(#833AB4) · 핑크(#E1306C) · 블랙(#08070D) 글래스모피즘
-- 인스타그램 그라데이션 + Apple 스타일 미니멀 타이포
-- Pretendard Variable 한국어 폰트
-- 모바일 퍼스트, 하단 네비게이션, SafeArea 대응
-
----
-
-## 🚀 빠른 시작
-
-```bash
-# 1) 패키지 설치
-npm install
-
-# 2) 개발 서버
+```sh
+npm ci
 npm run dev
-# → http://localhost:3000
+```
 
-# 3) 프로덕션 빌드
-npm run build && npm run start
+프로덕션:
 
-# 4) 타입 체크
+```sh
+npm run build
+npm run start
+```
+
+Next.js 16 / React 19 / TypeScript / Tailwind CSS 3 / Zustand / IndexedDB를 사용합니다. Web Worker 빌드와 검증 환경을 일치시키기 위해 Webpack을 명시합니다. 차트는 통계 화면에서만 지연 로드합니다. 외부 폰트·광고·분석 추적 스크립트를 사용하지 않습니다.
+
+## 품질 확인
+
+```sh
+npm run lint
 npm run type-check
+npm test
+npm audit --omit=dev --audit-level=high
+npm run build
+npx playwright install chromium webkit
+npm run test:e2e
 ```
 
-Node.js 18.18+ 필요.
+단위 테스트: 분할 파일 병합, 잘못된 스키마, 정상 빈 목록, 아이디 정규화, 안전한 링크·CSV, 대용량 입력, 계정/날짜별 비교, 저장·삭제·이전 기록 마이그레이션·저장 실패.
 
-## 📦 의존성
+브라우저 테스트: 실제 Worker 업로드, 분할 파일, 오류 표시, 전체 변화 목록, 검색/페이지/CSV, 저장 동의·복원·삭제, 샘플 격리, 오프라인 복원, 모바일 레이아웃, 접근성. Chromium과 모바일 WebKit을 사용합니다. 오프라인 테스트는 별도 테스트 서버 연결을 실제로 끊고 캐시 복원을 확인합니다 (WebKit의 오프라인 모드 에뮬레이션 오류 회피). 테스트 파일은 합성 데이터이며 실제 계정 정보를 포함하지 않습니다.
 
-| 카테고리 | 패키지 |
-|---|---|
-| 프레임워크 | `next@14.2`, `react@18`, `typescript@5` |
-| 스타일 | `tailwindcss@3.4`, `clsx`, `tailwind-merge` |
-| 모션 | `framer-motion@11` |
-| 상태 | `zustand@4` |
-| 차트 | `recharts@2.12` |
-| 아이콘 | `lucide-react` |
+GitHub Actions가 PR과 main 변경 시 검사합니다. 실패 시 `test-results`에 화면과 trace를 남깁니다. 의존성과 GitHub Actions 업데이트는 Dependabot으로 추적합니다.
 
----
+## 배포
 
-## 📁 프로젝트 구조
+Vercel 또는 Node.js를 지원하는 Next.js 호스팅에 저장소를 연결하세요. 환경변수·데이터베이스·인스타그램 API 키는 필요하지 않습니다.
 
-```
-insta-analyzer/
-├── app/                          # Next.js App Router
-│   ├── layout.tsx                # 루트 레이아웃 (다크모드, 하단 네비, PWA 메타)
-│   ├── page.tsx                  # 1) 랜딩 페이지
-│   ├── upload/page.tsx           # 2) 파일 업로드 (드래그앤드롭, 샘플 체험)
-│   ├── dashboard/page.tsx        # 3) 분석 결과 대시보드
-│   ├── unfollowers/page.tsx      # 4) 언팔러 / 외사랑 리스트 (세그먼트)
-│   ├── mutual/page.tsx           # 5) 맞팔 친구 리스트
-│   ├── stats/page.tsx            # 6) 통계 페이지 (차트 + 비율)
-│   ├── settings/page.tsx         # 7) 설정 (테마, 데이터 삭제, 프라이버시)
-│   ├── guide/page.tsx            # 인스타 데이터 다운로드 가이드
-│   ├── history/page.tsx          # 분석 기록 보기
-│   └── globals.css               # 글래스모피즘, 폰트, 다크모드
-│
-├── components/
-│   ├── analysis/
-│   │   ├── SearchBar.tsx
-│   │   └── UserList.tsx          # UserCard + UserList (그라디언트 아바타)
-│   ├── common/
-│   │   ├── LoadingSpinner.tsx    # 인스타 그라데이션 스피너
-│   │   ├── PrivacyBadge.tsx      # "내 데이터는 저장되지 않습니다"
-│   │   ├── StoreHydrator.tsx     # localStorage → zustand 부팅 시 동기화
-│   │   └── ThemeProvider.tsx     # 다크/라이트 토글
-│   ├── layout/
-│   │   ├── BottomNav.tsx         # 모바일 하단 5탭 네비
-│   │   └── PageHeader.tsx        # 공통 헤더(뒤로가기 + 제목 + 우측 액션)
-│   ├── stats/
-│   │   ├── FollowerChart.tsx     # Recharts AreaChart
-│   │   └── StatCard.tsx          # 변화량 + 그라데이션 강조
-│   ├── ui/
-│   │   ├── EmptyState.tsx        # 빈 상태 UI (아이콘 + CTA)
-│   │   ├── GlassCard.tsx
-│   │   ├── GradientButton.tsx
-│   │   └── Skeleton.tsx          # 로딩 스켈레톤
-│   └── upload/
-│       └── DropZone.tsx          # 드래그앤드롭 + 클릭 업로드
-│
-├── lib/
-│   ├── analyzer.ts               # 핵심 차집합/교집합 + diff 로직
-│   ├── csv.ts                    # CSV 다운로드 (UTF-8 BOM)
-│   ├── parser.ts                 # JSON 파싱 + 파일 타입 자동 감지
-│   ├── storage.ts                # localStorage 래퍼 (서버 전송 없음)
-│   ├── sample-data.ts            # 샘플 체험용 더미 데이터
-│   └── cn.ts                     # className 유틸 (clsx + tailwind-merge)
-│
-├── store/
-│   └── useAnalysisStore.ts       # Zustand 전역 상태
-│
-├── types/
-│   └── index.ts                  # 인스타 JSON 스키마 + 내부 타입
-│
-├── public/
-│   ├── manifest.webmanifest      # PWA 매니페스트
-│   ├── sw.js                     # 서비스 워커 (offline 지원)
-│   ├── robots.txt
-│   └── icons/                    # 192/512 SVG 앱 아이콘
-│
-├── tailwind.config.ts            # 인스타 그라데이션, 글래스, 애니메이션
-├── next.config.js
-├── tsconfig.json
-└── package.json
-```
+- 설치: `npm ci`
+- 빌드: **`npm run build`** (오프라인 서비스 워커 생성 포함)
+- 실행: `npm run start` (자체 Node 호스팅)
+- HTTPS 필요: 설치/PWA/서비스 워커는 HTTPS 또는 localhost에서 동작합니다.
+- `public`과 `.next`를 모두 배포해야 합니다. `next build`만 직접 실행하지 마세요.
+- `next.config.js`의 보안 헤더 및 `/sw.js`의 캐시 금지 헤더를 프록시에서도 보존하세요.
+- 기본 배포는 도메인 루트(`/`) 기준입니다. GitHub Pages의 저장소 하위 경로 배포는 별도 구성이 필요합니다.
 
----
+서비스 워커는 빌드별 버전으로 공개 앱 화면·정적 자산만 사전 저장합니다. 설치가 끝난 뒤 저장 기록을 오프라인에서 열 수 있습니다. 새 버전이 준비되면 사용자가 새로고침을 선택합니다. JSON과 CSV는 서비스 워커 캐시에 넣지 않습니다. 프레임워크 내부 데이터 요청은 캐시하지 않고 오프라인 페이지 탐색 시 문서 캐시를 사용합니다.
 
-## 🧠 분석 로직 (lib/analyzer.ts)
+배포 후 실제 도메인에서 HTTPS, 모바일 홈 화면 설치, 새 버전 업데이트, 오프라인 복원을 확인하세요. 이 저장소의 테스트는 로컬 프로덕션 서버 기준이며 호스팅 설정을 대신 검증하지 않습니다.
 
-```text
-following  = JSON 안의 relationships_following 배열
-followers  = JSON 안의 relationships_followers 배열 (또는 그냥 배열)
+## 데이터 보관과 한계
 
-unfollowers = following − followers   ← 내가 팔로우, 상대는 안 따름
-fans        = followers − following   ← 상대만 팔로우 (내가 외사랑 받는 중)
-mutuals     = following ∩ followers   ← 진짜 친구
+- 파일당 20MB, 합계 50MB, 최대 100개 JSON, 팔로워/팔로잉 각각 20만 명까지 지원합니다.
+- 잘못된 행을 무시하지 않고 전체 입력을 거부합니다. 정상적으로 비어 있는 목록은 허용합니다.
+- 중간 분할 번호 누락과 중복은 거부하지만 마지막 파일 누락은 원본 메타데이터가 없어 확인할 수 없습니다.
+- 번호 없는 `followers.json` 및 객체로 감싼 관계 형식도 지원합니다. `following`의 아이디가 `title`에 있는 형식도 지원합니다.
+- 계정별 최대 10개 기록을 보관합니다. 같은 계정·같은 기준일의 재분석은 그 날짜 기록을 교체합니다. 날짜는 사용자가 제공하므로 원본 생성일을 정확히 입력해야 합니다.
+- 이름 변경은 별도 계정으로 취급됩니다. 서로 다른 소유 계정·샘플·동일 기준일은 변화 비교에서 제외합니다.
+- 이전 localStorage 기록은 읽을 수 있으면 IndexedDB로 옮깁니다. 소유 계정을 알 수 없는 이전 기록은 조회만 가능하고 비교하지 않습니다. 읽을 수 없는 기록은 경고하고 원본을 보존합니다.
+- 기록 저장 실패 시 화면 분석은 유지하고 경고합니다. 브라우저 데이터 삭제/자동 정리/시크릿 모드 종료 시 기록이 사라질 수 있습니다. 원본 내보내기를 별도로 보관하세요.
+- 기록은 이 브라우저·이 도메인에만 있습니다. 다른 기기·브라우저·도메인으로 자동 동기화하지 않습니다.
+- `데이터 처리 안내` 페이지에서 저장 위치, 삭제, 외부 링크 및 호스팅 요청에 대해 설명합니다. 운영 환경의 호스팅 로그 보관 정책은 운영자가 확인해야 합니다.
 
-(이전 분석과 비교)
-lostFollowers = prev.followers − curr.followers   ← 최근 언팔러
-newFollowers  = curr.followers − prev.followers   ← 새 팔로워
-```
+## 제보
 
-`username` 기준 `Map` 인덱싱으로 O(n) 비교. 유저 1만명도 100ms 내 처리됩니다.
+[GitHub Issues](https://github.com/jonghyun0000/Find-Unfollow2.1/issues)에 재현 절차와 합성 예제를 남겨주세요. 원본 JSON, 팔로워 명단, 계정 비밀번호를 공개하지 마세요.
 
----
-
-## 🛡️ 보안 / 프라이버시
-
-- 업로드된 JSON은 `FileReader`로 읽어 메모리에서만 처리. **서버 전송 없음.**
-- 분석 결과는 `localStorage` 키 `insta-analyzer:v1` 에만 저장 (최대 10개)
-- 외부 API 호출 일체 없음 (트래커, 광고 SDK, 분석 도구 모두 미설치)
-- 설정 페이지에서 한 번에 모든 기록 삭제 가능
-
----
-
-## 📲 PWA 설치
-
-1. iPhone Safari : 공유 → "홈화면에 추가"
-2. Android Chrome : 우측 상단 메뉴 → "앱 설치"
-3. 데스크탑 Chrome : 주소창 우측 설치 아이콘
-
-홈화면 아이콘에서 실행하면 풀스크린 앱처럼 동작하고, 한 번 방문 후엔 오프라인에서도 열립니다.
-
----
-
-## ☁️ Vercel 배포
-
-```bash
-# 1) GitHub에 푸시
-git init && git add . && git commit -m "init: unfollow lens"
-git remote add origin https://github.com/<your>/insta-analyzer.git
-git push -u origin main
-
-# 2) Vercel 연결
-#    https://vercel.com/new → GitHub 저장소 import
-#    Framework: Next.js (자동 인식)
-#    Build Command: npm run build (기본값)
-#    Output Directory: .next (기본값)
-#    환경변수: 없음
-```
-
-또는 CLI:
-
-```bash
-npm i -g vercel
-vercel
-```
-
-배포 후 자동으로 HTTPS가 적용되어 PWA 설치 조건을 만족합니다.
-
----
-
-## 🧪 샘플 데이터 체험
-
-업로드 페이지에서 "샘플 데이터로 체험해보기" 버튼을 누르면 미리 준비된 더미 JSON으로 즉시 분석을 볼 수 있습니다. (이 결과는 localStorage에 저장되지 않습니다.)
-
----
-
-## 🛣️ 추후 확장 아이디어
-
-| 영역 | 아이디어 |
-|---|---|
-| 분석 | 차단 목록(`blocked_accounts.json`) 비교, 가까운 친구 분석, 휴면 계정 감지 |
-| 시각화 | 관계 네트워크 그래프 (D3 force-directed), 워드클라우드 |
-| UX | 그룹 라벨링 (지인/회사/관심사), 즐겨찾기 |
-| 자동화 | 주기적 알림 ("매주 일요일 분석 리마인더" - Notification API) |
-| 공유 | 결과 카드 이미지 내보내기 (html-to-image), 익명화된 통계만 공유 |
-| 다국어 | i18n (next-intl), 영어/일본어 |
-| 보관 | IndexedDB 마이그레이션 (10개 제한 → 무제한) |
-
----
-
-## 📄 라이선스
-
-MIT License — 자유롭게 수정/배포 가능합니다.
-
----
-
-## 💌 만든 사람
-
-Made with 💗 for clean Instagram lists.
+MIT License. 자세한 내용은 LICENSE를 참고하세요.

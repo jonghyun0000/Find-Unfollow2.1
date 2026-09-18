@@ -2,7 +2,13 @@
 'use client';
 
 import {
-  AreaChart, Area, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid,
+  AreaChart,
+  Area,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+  CartesianGrid,
 } from 'recharts';
 import type { AnalysisResult } from '@/types';
 
@@ -12,13 +18,11 @@ interface Props {
 
 export function FollowerChart({ history }: Props) {
   // 시간순(과거→현재)로 뒤집어서 차트 데이터로 변환
-  const data = [...history]
-    .reverse()
-    .map((h) => ({
-      date: new Date(h.createdAt).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' }),
-      followers: h.followers.length,
-      following: h.following.length,
-    }));
+  const data = [...history].reverse().map((h) => ({
+    date: h.snapshotDate,
+    followers: h.followers.length,
+    following: h.following.length,
+  }));
 
   return (
     <div className="h-64">

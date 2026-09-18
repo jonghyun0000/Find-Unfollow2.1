@@ -22,10 +22,8 @@ const sizes: Record<NonNullable<Props['size']>, string> = {
 const variants: Record<Variant, string> = {
   gradient:
     'bg-ig-gradient text-white font-semibold shadow-glow hover:brightness-110 active:brightness-95',
-  ghost:
-    'bg-white/5 hover:bg-white/10 text-white/90 backdrop-blur-md border border-white/10',
-  outline:
-    'ig-border text-white hover:bg-white/5',
+  ghost: 'bg-white/5 hover:bg-white/10 text-white/90 backdrop-blur-md border border-white/10',
+  outline: 'ig-border text-white hover:bg-white/5',
 };
 
 export const GradientButton = forwardRef<HTMLButtonElement, Props>(function GradientButton(

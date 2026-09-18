@@ -3,7 +3,6 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { GradientButton } from './GradientButton';
 
 interface Props {
   icon: React.ReactNode;
@@ -26,8 +25,8 @@ export function EmptyState({ icon, title, description, ctaLabel, ctaHref }: Prop
       <h3 className="text-base font-semibold">{title}</h3>
       {description && <p className="mt-1.5 text-sm text-white/55 leading-relaxed">{description}</p>}
       {ctaLabel && ctaHref && (
-        <Link href={ctaHref} className="inline-block mt-5">
-          <GradientButton size="md">{ctaLabel}</GradientButton>
+        <Link href={ctaHref} className="inline-block mt-5 rounded-xl bg-ig-gradient px-5 py-3">
+          {ctaLabel}
         </Link>
       )}
     </motion.div>

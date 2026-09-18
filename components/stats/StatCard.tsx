@@ -23,9 +23,7 @@ const accents = {
 
 export function StatCard({ label, value, delta, icon, accent = 'pink', className }: Props) {
   const deltaText =
-    typeof delta === 'number'
-      ? delta > 0 ? `+${delta}` : delta < 0 ? `${delta}` : '±0'
-      : null;
+    typeof delta === 'number' ? (delta > 0 ? `+${delta}` : delta < 0 ? `${delta}` : '±0') : null;
 
   return (
     <motion.div
@@ -33,16 +31,27 @@ export function StatCard({ label, value, delta, icon, accent = 'pink', className
       animate={{ opacity: 1, y: 0 }}
       className={cn('relative glass rounded-3xl p-5 overflow-hidden', className)}
     >
-      <div className={cn('absolute inset-0 bg-gradient-to-br pointer-events-none opacity-50', accents[accent])} />
+      <div
+        className={cn(
+          'absolute inset-0 bg-gradient-to-br pointer-events-none opacity-50',
+          accents[accent],
+        )}
+      />
       <div className="relative flex items-start justify-between">
         <div>
-          <p className="text-[12.5px] uppercase tracking-wider text-white/55 font-medium">{label}</p>
+          <p className="text-[12.5px] uppercase tracking-wider text-white/55 font-medium">
+            {label}
+          </p>
           <p className="mt-2 text-3xl font-bold tracking-tight">{value}</p>
           {deltaText !== null && (
             <p
               className={cn(
                 'mt-1 text-xs font-semibold',
-                (delta ?? 0) > 0 ? 'text-emerald-300' : (delta ?? 0) < 0 ? 'text-rose-300' : 'text-white/50',
+                (delta ?? 0) > 0
+                  ? 'text-emerald-300'
+                  : (delta ?? 0) < 0
+                    ? 'text-rose-300'
+                    : 'text-white/50',
               )}
             >
               {deltaText} 지난 분석 대비
