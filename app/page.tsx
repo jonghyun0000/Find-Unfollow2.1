@@ -1,10 +1,11 @@
+import { ShareService } from '@/components/common/ShareService';
 import Link from 'next/link';
 import { ArrowRight, ShieldCheck, Users, History, Download, ScanLine } from 'lucide-react';
 import { InstallGuide } from '@/components/common/InstallGuide';
 const features = [
-  { icon: Users, title: '맞팔 관계 한눈에', body: '나를 안 따르는 계정부터 맞팔까지.' },
+  { icon: Users, title: '맞팔 관계 한눈에', body: '나를 팔로우하지 않는 계정부터 맞팔까지.' },
   { icon: History, title: '달라진 팔로워 확인', body: '지난 기록과 비교해 변화를 확인해요.' },
-  { icon: Download, title: '찾고, 저장하고', body: '계정을 검색하고 전체 목록을 CSV로.' },
+  { icon: Download, title: '찾고, 저장하고', body: '아이디로 검색하고 목록을 파일로 저장하세요.' },
 ];
 export default function LandingPage() {
   return (
@@ -45,11 +46,14 @@ export default function LandingPage() {
           href="/guide"
           className="mt-3 flex min-h-11 items-center justify-center gap-1 text-sm text-slate-600"
         >
-          파일이 처음이라면? <span className="font-semibold text-brand">다운로드 방법</span>
+          파일이 아직 없나요? <span className="font-semibold text-brand">다운로드 방법</span>
           <ArrowRight size={14} />
         </Link>
       </section>
       <InstallGuide />
+      <div className="mt-3">
+        <ShareService />
+      </div>
       <section className="mt-8" aria-labelledby="features">
         <h2 id="features" className="mb-4 text-sm font-semibold">
           필요한 정보만, 간단하게

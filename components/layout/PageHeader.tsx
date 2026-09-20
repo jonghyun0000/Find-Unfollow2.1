@@ -18,7 +18,7 @@ export function PageHeader({ title, subtitle, back, right, className }: Props) {
   return (
     <header
       className={cn(
-        'sticky top-0 z-30 backdrop-blur-xl bg-white/95 border-b border-slate-200',
+        'sticky top-0 z-30 backdrop-blur-xl bg-white border-b border-slate-200',
         className,
       )}
     >

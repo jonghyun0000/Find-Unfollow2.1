@@ -39,12 +39,12 @@ export default function StatsPage() {
           )}
         </GlassCard>
         <GlassCard>
-          <h2 className="font-semibold mb-4">현재 관계 분포</h2>
+          <h2 className="font-semibold mb-4">팔로우 관계 요약</h2>
           <dl className="space-y-4">
             {[
               ['맞팔', current.mutuals.length],
-              ['나를 안 따름', current.unfollowers.length],
-              ['내가 안 따름', current.fans.length],
+              ['나를 팔로우하지 않음', current.unfollowers.length],
+              ['내가 팔로우하지 않음', current.fans.length],
             ].map(([label, count]) => (
               <div key={label} className="flex justify-between text-sm">
                 <dt className="text-slate-600">{label}</dt>
@@ -55,7 +55,7 @@ export default function StatsPage() {
         </GlassCard>
         {records.length > 0 && (
           <GlassCard>
-            <h2 className="font-semibold mb-3">기록별 수치</h2>
+            <h2 className="font-semibold mb-3">날짜별 팔로워·팔로잉 수</h2>
             <table className="w-full text-sm text-left">
               <caption className="sr-only">기준일별 팔로워와 팔로잉 수</caption>
               <thead>

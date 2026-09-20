@@ -1,4 +1,5 @@
 'use client';
+import { ShareService } from '@/components/common/ShareService';
 import Link from 'next/link';
 import { Heart, Users, UserMinus, ArrowRight } from 'lucide-react';
 import { useAnalysisStore } from '@/store/useAnalysisStore';
@@ -21,6 +22,7 @@ export default function DashboardPage() {
             이 결과는 저장되지 않았습니다. 새로고침하거나 앱을 닫으면 사라집니다.
           </p>
         )}
+        <ShareService />
         <div className="grid grid-cols-2 gap-3">
           <StatCard
             label="팔로워"
@@ -35,7 +37,7 @@ export default function DashboardPage() {
             accent="purple"
           />
           <StatCard
-            label="나를 안 따름"
+            label="나를 팔로우하지 않음"
             value={current.unfollowers.length.toLocaleString()}
             icon={<UserMinus size={18} />}
             accent="rose"
@@ -48,14 +50,14 @@ export default function DashboardPage() {
           />
         </div>
         <p className="text-sm text-slate-600 leading-relaxed">
-          ‘나를 안 따름’은 현재 맞팔하지 않는 계정입니다. 과거에 팔로우했다가 해제했는지는 한 번의
-          데이터로 알 수 없습니다.
+          ‘나를 팔로우하지 않음’은 현재 맞팔하지 않는 계정입니다. 과거에 팔로우했다가 해제했는지는
+          한 번의 데이터로 알 수 없습니다.
         </p>
         {[
           [
             '/unfollowers',
             '팔로우 관계 전체 보기',
-            `${current.unfollowers.length}명이 나를 안 따름 · ${current.fans.length}명을 내가 안 따름`,
+            `${current.unfollowers.length}명이 나를 팔로우하지 않음 · ${current.fans.length}명을 내가 팔로우하지 않음`,
           ],
           ['/mutual', '맞팔 전체 보기', `${current.mutuals.length}명`],
         ].map(([href, title, desc]) => (
@@ -99,8 +101,8 @@ export default function DashboardPage() {
             </>
           ) : (
             <p className="mt-3 text-sm text-slate-600 leading-relaxed">
-              비교할 이전 데이터가 없습니다. 같은 계정의 더 이전 기준일 기록이 필요합니다. 첫
-              분석에서 ‘언팔 없음’을 판단하지 않습니다.
+              아직 비교할 기록이 없어요. 같은 계정의 서로 다른 날짜에 받은 파일로 분석 기록을 두 개
+              이상 저장하면 팔로워 변화를 볼 수 있습니다.
             </p>
           )}
           <p className="mt-4 text-xs leading-relaxed text-slate-600">

@@ -10,8 +10,8 @@ import { cn } from '@/lib/cn';
 const items = [
   { href: '/', label: '홈', icon: Home },
   { href: '/upload', label: '업로드', icon: Upload },
-  { href: '/dashboard', label: '대시보드', icon: BarChart3 },
-  { href: '/changes', label: '변화', icon: Users2 },
+  { href: '/dashboard', label: '분석 결과', icon: BarChart3 },
+  { href: '/changes', label: '변화 비교', icon: Users2 },
   { href: '/settings', label: '설정', icon: Settings },
 ] as const;
 
@@ -24,7 +24,7 @@ export function BottomNav() {
       className="fixed bottom-0 inset-x-0 z-40 px-3 pb-3"
       style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 12px)' }}
     >
-      <div className="mx-auto max-w-md rounded-3xl border border-slate-200 bg-white/95 shadow-glass backdrop-blur-xl px-2 py-2">
+      <div className="mx-auto max-w-md rounded-3xl border border-slate-200 bg-white shadow-glass backdrop-blur-xl px-2 py-2">
         <ul className="grid grid-cols-5">
           {items.map(({ href, label, icon: Icon }) => {
             const active = pathname === href || (href !== '/' && pathname.startsWith(href));
