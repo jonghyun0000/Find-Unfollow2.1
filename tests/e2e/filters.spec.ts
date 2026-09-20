@@ -21,13 +21,13 @@ test('filters show reasons, restore hidden accounts, and export only visible res
   await page.getByRole('checkbox', { name: /전체 기간/ }).check();
   await page.getByRole('button', { name: '분석 시작', exact: true }).click();
   await page.getByRole('link', { name: /팔로우 관계 전체 보기/ }).click();
-  await page.getByRole('checkbox', { name: /한림대 관련/ }).check();
+  await page.getByRole('checkbox', { name: /hallym이 포함된/ }).check();
   await page.getByRole('checkbox', { name: /official이/ }).check();
   await expect(page.getByRole('link', { name: /@hallym_club/ })).toHaveCount(0);
-  await page.getByLabel('직접 제외할 단어').fill('student');
+  await page.getByLabel('숨길 아이디에 포함된 단어').fill('student');
   await expect(page.getByRole('link', { name: /@friend/ })).toBeVisible();
   const download = page.waitForEvent('download');
-  await page.getByRole('button', { name: '전체 검색 결과 CSV' }).click();
+  await page.getByRole('button', { name: '현재 목록 저장 (CSV)' }).click();
   const stream = await (await download).createReadStream();
   const chunks: Buffer[] = [];
   for await (const chunk of stream!) chunks.push(Buffer.from(chunk));
@@ -54,7 +54,7 @@ test('shared link contains campaign attribution but no account data', async ({ p
       },
     });
   });
-  await page.getByRole('button', { name: '친구에게 서비스 알려주기' }).click();
+  await page.getByRole('button', { name: '친구에게 링크 공유하기' }).click();
   const data = await page.evaluate(() => (window as Window & { shared?: ShareData }).shared);
   expect(data?.url).toContain('utm_source=hallym');
   expect(JSON.stringify(data)).not.toContain('private_name');

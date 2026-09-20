@@ -125,7 +125,7 @@ export function InstallGuide() {
             {installed ? '홈 화면에서 사용 중이에요' : '홈 화면에 추가하기'}
           </span>
           <span className="mt-1 block text-xs leading-relaxed text-slate-600">
-            아이콘 한 번으로, 더 간편하게 열어요.
+            홈 화면의 아이콘을 눌러 바로 열 수 있어요.
           </span>
         </span>
         {installed ? (
@@ -166,10 +166,10 @@ export function InstallGuide() {
           </button>
         </div>
         <h2 id="install-title" className="mt-5 text-xl font-bold">
-          홈 화면에서 바로 만나요
+          홈 화면에 바로가기 추가
         </h2>
         <p className="mt-2 text-sm leading-relaxed text-slate-600">
-          Unfollow Lens를 아이콘으로 추가하면 주소를 다시 입력할 필요가 없어요.
+          홈 화면에 추가하면 다음부터 주소를 입력하지 않고 바로 열 수 있어요.
         </p>
         {installed ? (
           <p className="mt-5 rounded-xl bg-emerald-50 p-4 text-sm text-emerald-800">

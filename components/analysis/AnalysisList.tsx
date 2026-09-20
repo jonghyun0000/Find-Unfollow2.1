@@ -32,16 +32,20 @@ function Inner({ mode }: { mode: 'relationships' | 'changes' | 'mutuals' }) {
           { key: 'newFollowers', label: '새 팔로워', users: diffResult?.newFollowers ?? [] },
           {
             key: 'unfollowedByMe',
-            label: '내가 팔로우 해제',
+            label: '팔로잉에서 사라진 계정',
             users: diffResult?.unfollowedByMe ?? [],
           },
-          { key: 'newFollowing', label: '새 팔로잉', users: diffResult?.newFollowing ?? [] },
+          {
+            key: 'newFollowing',
+            label: '새로 팔로우한 계정',
+            users: diffResult?.newFollowing ?? [],
+          },
         ]
       : mode === 'mutuals'
         ? [{ key: 'mutuals', label: '맞팔', users: current.mutuals }]
         : [
-            { key: 'unfollowers', label: '나를 안 따름', users: current.unfollowers },
-            { key: 'fans', label: '내가 안 따름', users: current.fans },
+            { key: 'unfollowers', label: '나를 팔로우하지 않음', users: current.unfollowers },
+            { key: 'fans', label: '내가 팔로우하지 않음', users: current.fans },
           ];
   const selected = groups.find((g) => g.key === params.get('group')) ?? groups[0];
   const unavailable = marked.id === current.id ? marked.names : new Set<string>();
@@ -86,16 +90,14 @@ function Inner({ mode }: { mode: 'relationships' | 'changes' | 'mutuals' }) {
         <p className="text-sm text-slate-600 leading-relaxed">
           {mode === 'changes'
             ? previous
-              ? `${previous.snapshotDate} → ${current.snapshotDate} 비교입니다. 계정 이름 변경·삭제·비활성화나 내보내기 범위 차이도 목록에서 사라지는 원인이 될 수 있습니다. 실제 언팔 행동을 확정하지 않습니다.`
-              : '비교할 이전 기록이 없습니다. 같은 계정의 더 이전 기준일 데이터를 저장하면 변화를 볼 수 있습니다.'
+              ? `${previous.snapshotDate} → ${current.snapshotDate} 비교입니다. 계정 이름 변경·삭제·비활성화나 내보내기 범위 차이도 목록에서 사라지는 원인이 될 수 있습니다. 목록에서 사라졌다는 이유만으로 언팔로우했다고 단정할 수는 없어요.`
+              : '비교할 이전 기록이 없습니다. 같은 계정의 서로 다른 날짜 기록이 두 개 이상 있어야 변화를 볼 수 있습니다.'
             : mode === 'mutuals'
               ? '서로 팔로우하는 계정입니다.'
-              : '현재 두 목록의 차이를 보여줍니다. 이전에 나를 팔로우한 적이 없는 계정도 포함됩니다.'}
+              : '다운로드한 파일을 기준으로 팔로우 관계를 비교합니다. 나를 팔로우한 적이 없는 계정도 포함될 수 있어요.'}
         </p>
         <details className="glass rounded-2xl p-4" open>
-          <summary className="cursor-pointer text-sm font-semibold">
-            보고 싶은 계정만 골라보기
-          </summary>
+          <summary className="cursor-pointer text-sm font-semibold">목록에서 계정 숨기기</summary>
           <div className="mt-4 space-y-3 text-sm">
             <label className="flex items-center gap-3">
               <input
@@ -104,7 +106,7 @@ function Inner({ mode }: { mode: 'relationships' | 'changes' | 'mutuals' }) {
                 onChange={(e) => setHallym(e.target.checked)}
                 className="size-5 accent-violet-600"
               />
-              한림대 관련 단어 숨기기 (hallym)
+              hallym이 포함된 아이디 숨기기
             </label>
             <label className="flex items-center gap-3">
               <input
@@ -116,7 +118,7 @@ function Inner({ mode }: { mode: 'relationships' | 'changes' | 'mutuals' }) {
               official이 포함된 아이디 숨기기
             </label>
             <label className="block">
-              직접 제외할 단어
+              숨길 아이디에 포함된 단어
               <input
                 className="field mt-2"
                 value={keywords}
@@ -182,7 +184,7 @@ function Inner({ mode }: { mode: 'relationships' | 'changes' | 'mutuals' }) {
               )
             }
           >
-            전체 검색 결과 CSV
+            현재 목록 저장 (CSV)
           </GradientButton>
         </div>
         {list.length ? (

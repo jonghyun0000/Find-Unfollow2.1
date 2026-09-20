@@ -116,7 +116,7 @@ test('shows all lost followers, restores saved records, and isolates samples', a
   await page.goto('/upload');
   await page.getByRole('button', { name: '샘플 데이터로 체험하기' }).click();
   await expect(page.getByRole('status')).toContainText('샘플 데이터');
-  await expect(page.getByText('비교할 이전 데이터가 없습니다.', { exact: false })).toBeVisible();
+  await expect(page.getByText('아직 비교할 기록이 없어요.', { exact: false })).toBeVisible();
   await page.reload();
   await expect(page.getByRole('status')).toHaveCount(0);
   await page.getByRole('link', { name: '변화 목록 전체 보기 →' }).click();
@@ -133,7 +133,7 @@ test('paginates, searches, and exports the entire matching result', async ({ pag
   await page.getByRole('button', { name: '다음', exact: true }).click();
   await expect(page.getByRole('link', { name: /@person_/ })).toHaveCount(11);
   const downloaded = page.waitForEvent('download');
-  await page.getByRole('button', { name: '전체 검색 결과 CSV' }).click();
+  await page.getByRole('button', { name: '현재 목록 저장 (CSV)' }).click();
   const download = await downloaded;
   const csv = await readFile((await download.path())!, 'utf8');
   expect(csv).toContain('person_000');
@@ -206,7 +206,7 @@ test('main flows have accessible controls, no runtime errors, and fit the viewpo
 }, testInfo) => {
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
-  for (const route of ['/', '/upload']) {
+  for (const route of ['/', '/upload', '/guide']) {
     await page.goto(route);
     const result = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])

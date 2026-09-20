@@ -10,8 +10,8 @@ import { cn } from '@/lib/cn';
 const items = [
   { href: '/', label: '홈', icon: Home },
   { href: '/upload', label: '업로드', icon: Upload },
-  { href: '/dashboard', label: '대시보드', icon: BarChart3 },
-  { href: '/changes', label: '변화', icon: Users2 },
+  { href: '/dashboard', label: '분석 결과', icon: BarChart3 },
+  { href: '/changes', label: '변화 비교', icon: Users2 },
   { href: '/settings', label: '설정', icon: Settings },
 ] as const;
 

@@ -98,14 +98,14 @@ export default function UploadPage() {
   };
   return (
     <>
-      <PageHeader title="데이터 분석" subtitle="내보내기 파일을 이 기기에서만 읽습니다" back />
+      <PageHeader title="데이터 분석" subtitle="인스타그램에서 받은 파일을 선택해주세요" back />
       <form onSubmit={runAnalysis} className="mx-auto max-w-md px-5 py-6 space-y-5">
         <PrivacyBadge />
         <Link
           href="/guide"
           className="block rounded-2xl border border-violet-200 bg-violet-50 p-4 text-sm font-semibold text-brand"
         >
-          파일은 어디서 받나요? 3단계 준비 가이드 →
+          파일이 아직 없나요? 다운로드 방법 보기 →
         </Link>
         <p className="text-sm text-slate-600">
           ZIP 압축을 풀어 <b>following.json 1개</b>와{' '}
@@ -149,8 +149,8 @@ export default function UploadPage() {
               className="field mt-2"
             />
             <span className="block mt-2 text-xs text-slate-600">
-              인스타그램에서 이 데이터를 생성한 날짜입니다. 같은 계정·날짜로 저장하면 기존 기록을
-              교체합니다.
+              인스타그램에서 파일 준비가 완료된 날짜를 입력하세요. 같은 아이디와 날짜로 저장한
+              기록이 있으면 새 기록으로 바뀝니다.
             </span>
           </label>
           <label className="flex gap-3 text-sm leading-relaxed">
@@ -163,8 +163,8 @@ export default function UploadPage() {
             전체 기간으로 요청한 같은 계정의 파일이며, 모든 팔로워 파일을 선택했습니다.
           </label>
           <p className="text-xs text-slate-600">
-            파일 일부가 빠지거나 다른 기준일의 파일이 섞이면 결과가 틀릴 수 있습니다. 마지막 분할
-            파일 누락은 앱이 자동으로 확인할 수 없습니다.
+            파일이 빠지거나 다른 날짜에 받은 파일이 섞이면 결과가 부정확할 수 있습니다. 다운로드한
+            폴더와 선택한 파일 목록을 한 번 더 비교해주세요.
           </p>
           <label className="flex gap-3 text-sm leading-relaxed">
             <input
