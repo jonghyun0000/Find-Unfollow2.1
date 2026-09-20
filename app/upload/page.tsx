@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { DropZone } from '@/components/upload/DropZone';
@@ -100,6 +101,12 @@ export default function UploadPage() {
       <PageHeader title="데이터 분석" subtitle="내보내기 파일을 이 기기에서만 읽습니다" back />
       <form onSubmit={runAnalysis} className="mx-auto max-w-md px-5 py-6 space-y-5">
         <PrivacyBadge />
+        <Link
+          href="/guide"
+          className="block rounded-2xl border border-violet-200 bg-violet-50 p-4 text-sm font-semibold text-brand"
+        >
+          파일은 어디서 받나요? 3단계 준비 가이드 →
+        </Link>
         <p className="text-sm text-slate-600">
           ZIP 압축을 풀어 <b>following.json 1개</b>와{' '}
           <b>followers_1.json, followers_2.json 등 모든 팔로워 파일</b>을 선택해주세요. 파일당 20MB,

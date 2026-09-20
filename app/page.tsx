@@ -1,3 +1,4 @@
+import { ShareService } from '@/components/common/ShareService';
 import Link from 'next/link';
 import { ArrowRight, ShieldCheck, Users, History, Download, ScanLine } from 'lucide-react';
 import { InstallGuide } from '@/components/common/InstallGuide';
@@ -50,6 +51,9 @@ export default function LandingPage() {
         </Link>
       </section>
       <InstallGuide />
+      <div className="mt-3">
+        <ShareService />
+      </div>
       <section className="mt-8" aria-labelledby="features">
         <h2 id="features" className="mb-4 text-sm font-semibold">
           필요한 정보만, 간단하게

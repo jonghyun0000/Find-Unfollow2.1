@@ -27,6 +27,18 @@ export default function GuidePage() {
     <>
       <PageHeader title="데이터 다운로드 방법" back />
       <div className="mx-auto max-w-md px-5 py-6 space-y-5">
+        <section className="glass rounded-2xl p-5">
+          <h2 className="font-semibold">처음이라면, 이것만 준비하세요</h2>
+          <ol className="mt-3 space-y-2 text-sm text-slate-600">
+            <li>1. 인스타그램에서 팔로워·팔로잉 데이터 요청</li>
+            <li>2. 전체 기간 · JSON으로 다운로드 후 압축 풀기</li>
+            <li>3. following.json + 모든 followers 파일 선택</li>
+          </ol>
+          <p className="mt-3 text-xs text-slate-600">
+            파일 앱에서 followers를 검색하면 더 쉽게 찾을 수 있어요. 인스타그램 데이터 준비 시간은
+            별도로 필요합니다.
+          </p>
+        </section>
         <ol className="space-y-4">
           {steps.map(([title, body], i) => (
             <li className="glass rounded-2xl p-5" key={title}>

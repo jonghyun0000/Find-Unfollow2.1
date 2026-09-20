@@ -1,4 +1,5 @@
 'use client';
+import { ShareService } from '@/components/common/ShareService';
 import Link from 'next/link';
 import { Heart, Users, UserMinus, ArrowRight } from 'lucide-react';
 import { useAnalysisStore } from '@/store/useAnalysisStore';
@@ -21,6 +22,7 @@ export default function DashboardPage() {
             이 결과는 저장되지 않았습니다. 새로고침하거나 앱을 닫으면 사라집니다.
           </p>
         )}
+        <ShareService />
         <div className="grid grid-cols-2 gap-3">
           <StatCard
             label="팔로워"

@@ -2,9 +2,20 @@
 import { useState } from 'react';
 import { ExternalLink } from 'lucide-react';
 import type { InstaUser } from '@/types';
-export function UserCard({ user, badge }: { user: InstaUser; badge?: string }) {
+type ReviewProps = {
+  onToggleUnavailable?: (username: string) => void;
+  unavailable?: ReadonlySet<string>;
+  reasonFor?: (user: InstaUser) => string;
+};
+export function UserCard({
+  user,
+  badge,
+  onToggleUnavailable,
+  unavailable,
+  reasonFor,
+}: { user: InstaUser; badge?: string } & ReviewProps) {
   return (
-    <li className="glass rounded-2xl p-4 flex items-center gap-3">
+    <li className="glass rounded-2xl p-4 flex flex-wrap items-center gap-3">
       <span
         aria-hidden
         className="grid place-items-center size-10 shrink-0 rounded-full bg-brand text-white font-semibold"
@@ -21,11 +32,28 @@ export function UserCard({ user, badge }: { user: InstaUser; badge?: string }) {
         <ExternalLink className="inline ml-1.5" size={12} aria-hidden />
         <span className="sr-only"> (인스타그램, 새 탭)</span>
       </a>
+      {onToggleUnavailable && (
+        <div className="w-full border-t border-slate-100 pt-3">
+          {reasonFor && <p className="mb-2 text-xs text-slate-600">{reasonFor(user)}</p>}
+          <button
+            type="button"
+            onClick={() => onToggleUnavailable(user.username)}
+            className="min-h-10 rounded-lg bg-slate-50 px-3 text-xs text-slate-600"
+            aria-label={`${user.username} ${unavailable?.has(user.username) ? '확인 불가 표시 취소' : '확인 불가로 표시'}`}
+          >
+            {unavailable?.has(user.username) ? '확인 불가 표시 취소' : '확인 불가로 표시'}
+          </button>
+        </div>
+      )}
       {badge && <span className="text-xs text-slate-600 shrink-0">{badge}</span>}
     </li>
   );
 }
-export function UserList({ users, badge }: { users: InstaUser[]; badge?: string }) {
+export function UserList({
+  users,
+  badge,
+  ...review
+}: { users: InstaUser[]; badge?: string } & ReviewProps) {
   const [page, setPage] = useState(0);
   const pageCount = Math.max(1, Math.ceil(users.length / 50));
   const current = Math.min(page, pageCount - 1);
@@ -33,7 +61,7 @@ export function UserList({ users, badge }: { users: InstaUser[]; badge?: string 
     <>
       <ul className="space-y-2">
         {users.slice(current * 50, (current + 1) * 50).map((user) => (
-          <UserCard key={user.username} user={user} badge={badge} />
+          <UserCard key={user.username} user={user} badge={badge} {...review} />
         ))}
       </ul>
       {pageCount > 1 && (
