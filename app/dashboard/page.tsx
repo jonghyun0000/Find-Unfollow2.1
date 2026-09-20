@@ -101,8 +101,8 @@ export default function DashboardPage() {
             </>
           ) : (
             <p className="mt-3 text-sm text-slate-600 leading-relaxed">
-              아직 비교할 기록이 없어요. 이번 분석을 저장하고, 나중에 같은 계정의 새 파일을 분석하면
-              팔로워가 어떻게 달라졌는지 볼 수 있습니다.
+              아직 비교할 기록이 없어요. 같은 계정의 서로 다른 날짜에 받은 파일로 분석 기록을 두 개
+              이상 저장하면 팔로워 변화를 볼 수 있습니다.
             </p>
           )}
           <p className="mt-4 text-xs leading-relaxed text-slate-600">

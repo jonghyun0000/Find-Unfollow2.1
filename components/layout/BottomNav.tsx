@@ -24,7 +24,7 @@ export function BottomNav() {
       className="fixed bottom-0 inset-x-0 z-40 px-3 pb-3"
       style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 12px)' }}
     >
-      <div className="mx-auto max-w-md rounded-3xl border border-slate-200 bg-white/95 shadow-glass backdrop-blur-xl px-2 py-2">
+      <div className="mx-auto max-w-md rounded-3xl border border-slate-200 bg-white shadow-glass backdrop-blur-xl px-2 py-2">
         <ul className="grid grid-cols-5">
           {items.map(({ href, label, icon: Icon }) => {
             const active = pathname === href || (href !== '/' && pathname.startsWith(href));

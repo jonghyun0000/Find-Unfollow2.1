@@ -149,8 +149,8 @@ export default function UploadPage() {
               className="field mt-2"
             />
             <span className="block mt-2 text-xs text-slate-600">
-              인스타그램에서 파일 준비가 완료된 날짜를 입력하세요. 같은 아이디와 날짜로 저장한
-              기록이 있으면 새 기록으로 바뀝니다.
+              인스타그램에서 이 파일을 만든 날짜를 입력하세요. 같은 아이디와 날짜로 저장한 기록이
+              있으면 새 기록으로 바뀝니다.
             </span>
           </label>
           <label className="flex gap-3 text-sm leading-relaxed">
