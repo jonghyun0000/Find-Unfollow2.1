@@ -1,4 +1,5 @@
 'use client';
+import { accountLabel, isLocalAccount } from '@/lib/account-label';
 import { Suspense, useDeferredValue, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -71,7 +72,7 @@ function Inner({ mode }: { mode: 'relationships' | 'changes' | 'mutuals' }) {
         title={
           mode === 'changes' ? '팔로워 변화' : mode === 'mutuals' ? '맞팔 목록' : '팔로우 관계'
         }
-        subtitle={`${current.account ? '@' + current.account : '이전 버전 기록'} · ${current.snapshotDate}`}
+        subtitle={`${accountLabel(current.account)} · ${current.snapshotDate}`}
         back
       />
       <div className="page-shell py-5 space-y-4">
@@ -180,7 +181,7 @@ function Inner({ mode }: { mode: 'relationships' | 'changes' | 'mutuals' }) {
             onClick={() =>
               downloadCSV(
                 list,
-                `${current.account ?? 'history'}-${selected.key}-${current.snapshotDate}`,
+                `${isLocalAccount(current.account) ? 'analysis' : (current.account ?? 'history')}-${selected.key}-${current.snapshotDate}`,
               )
             }
           >

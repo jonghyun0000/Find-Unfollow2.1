@@ -1,4 +1,5 @@
 'use client';
+import { accountLabel } from '@/lib/account-label';
 import { ShareService } from '@/components/common/ShareService';
 import Link from 'next/link';
 import { Heart, Users, UserMinus, ArrowRight } from 'lucide-react';
@@ -14,7 +15,7 @@ export default function DashboardPage() {
     <>
       <PageHeader
         title="분석 결과"
-        subtitle={`${current.account ? '@' + current.account : '이전 버전 기록'} · 기준일 ${current.snapshotDate}`}
+        subtitle={`${accountLabel(current.account)} · 기준일 ${current.snapshotDate}`}
       />
       <div className="page-shell py-5 space-y-5">
         {!current.isSample && !history.some((h) => h.id === current.id) && (

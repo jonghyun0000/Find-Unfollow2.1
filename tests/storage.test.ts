@@ -1,7 +1,8 @@
 import 'fake-indexeddb/auto';
 import { test, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
-import { analyze } from '../lib/analyzer';
+import { analyze, previousFor } from '../lib/analyzer';
+import { accountLabel } from '../lib/account-label';
 import { clearAll, deleteOne, loadHistory, restoreSnapshot, saveAnalysis } from '../lib/storage';
 import { useAnalysisStore } from '../store/useAnalysisStore';
 const memory = new Map<string, string>();
@@ -41,6 +42,21 @@ test('stores compact records and restores derived relationships safely', async (
   assert.equal(history[0].unfollowers[0].href, 'https://www.instagram.com/alice/');
   await deleteOne(a.id);
   assert.equal((await loadHistory()).history.length, 0);
+});
+
+test('anonymous groups survive storage and compare only when explicitly reused', async () => {
+  const group = `local:${crypto.randomUUID()}`;
+  const first = result('01', group);
+  const separate = result('02', `local:${crypto.randomUUID()}`);
+  await saveAnalysis(first);
+  await saveAnalysis(separate);
+  const loaded = await loadHistory();
+  assert.equal(loaded.warning, null);
+  assert.equal(loaded.history.length, 2);
+  assert.equal(previousFor(loaded.history, separate), null);
+  assert.equal(previousFor(loaded.history, result('03', group))?.id, first.id);
+  assert.equal(accountLabel(group), '내 분석 기록');
+  assert.equal(accountLabel('existing_user'), '@existing_user');
 });
 
 test('replaces same account/date and retains at most ten records per account', async () => {

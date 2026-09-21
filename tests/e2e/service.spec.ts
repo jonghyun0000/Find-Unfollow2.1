@@ -20,8 +20,8 @@ async function upload(
     followers?: string[];
     date?: string;
     persist?: boolean;
+    continueRecord?: boolean;
     parts?: boolean;
-    account?: string;
     baseURL?: string;
   } = {},
 ) {
@@ -30,8 +30,8 @@ async function upload(
     followers = ['alice'],
     date = '2024-02-01',
     persist = false,
+    continueRecord = true,
     parts = false,
-    account = 'owner',
     baseURL = '',
   } = options;
   await page.goto(`${baseURL}/upload`);
@@ -41,10 +41,13 @@ async function upload(
   ];
   if (parts) files.push(file('followers_2.json', followers.slice(1).map(item)));
   await page.locator('input[type=file]').setInputFiles(files);
-  await page.getByLabel(/내 인스타그램 아이디/).fill(account);
   await page.getByLabel(/데이터 기준일/).fill(date);
   await page.getByLabel(/전체 기간으로 요청한/).check();
-  if (persist) await page.getByLabel(/이 기기에 분석 기록 저장/).check();
+  if (persist) {
+    await page.getByLabel(/이 기기에 분석 기록 저장/).check();
+    const selection = page.getByLabel('저장할 기록');
+    if (continueRecord && (await selection.count())) await selection.selectOption({ index: 1 });
+  }
   await page.getByRole('button', { name: '분석 시작', exact: true }).click();
   await expect(page).toHaveURL(/\/dashboard$/);
   await expect(page.getByRole('heading', { name: '분석 결과', exact: true })).toBeVisible();
@@ -81,7 +84,6 @@ test('rejects malformed files and missing follower parts without creating a resu
       file('following.json', { relationships_following: [item('alice')] }),
       file('followers_1.json', {}),
     ]);
-  await page.getByLabel(/내 인스타그램 아이디/).fill('owner');
   await page.getByLabel(/전체 기간으로 요청한/).check();
   await page.getByRole('button', { name: '분석 시작', exact: true }).click();
   await expect(page.getByRole('alert', { name: '파일 분석 오류' })).toContainText(
@@ -94,7 +96,6 @@ test('rejects malformed files and missing follower parts without creating a resu
       file('following.json', { relationships_following: [] }),
       file('followers_2.json', []),
     ]);
-  await page.getByLabel(/내 인스타그램 아이디/).fill('owner');
   await page.getByLabel(/전체 기간으로 요청한/).check();
   await page.getByRole('button', { name: '분석 시작', exact: true }).click();
   await expect(page.getByRole('alert', { name: '파일 분석 오류' })).toContainText(
@@ -123,6 +124,18 @@ test('shows all lost followers, restores saved records, and isolates samples', a
   await expect(page.getByRole('link', { name: /@person/ })).toHaveCount(7);
 });
 
+test('username-free imports start separate records by default', async ({ page }) => {
+  await page.goto('/upload');
+  await expect(page.getByLabel(/내 인스타그램 아이디/)).toHaveCount(0);
+  await upload(page, { persist: true, date: '2024-01-01' });
+  await upload(page, { persist: true, continueRecord: false });
+  await expect(page.getByText('아직 비교할 기록이 없어요.', { exact: false })).toBeVisible();
+  await page.goto('/history');
+  await expect(page.getByRole('heading', { name: '내 분석 기록', exact: true })).toHaveCount(2);
+  await page.reload();
+  await expect(page.getByRole('heading', { name: '내 분석 기록', exact: true })).toHaveCount(2);
+});
+
 test('paginates, searches, and exports the entire matching result', async ({ page }) => {
   await upload(page, {
     following: Array.from({ length: 61 }, (_, i) => `person_${String(i).padStart(3, '0')}`),
@@ -135,6 +148,7 @@ test('paginates, searches, and exports the entire matching result', async ({ pag
   const downloaded = page.waitForEvent('download');
   await page.getByRole('button', { name: '현재 목록 저장 (CSV)' }).click();
   const download = await downloaded;
+  expect(download.suggestedFilename()).not.toContain('local:');
   const csv = await readFile((await download.path())!, 'utf8');
   expect(csv).toContain('person_000');
   expect(csv).toContain('person_060');

@@ -9,9 +9,9 @@
   --instagram-red: #fd1d1d;
   --instagram-orange: #f77737;
   --instagram-yellow: #fcaf45;
-  --brand: 177 34 83;
-  --brand-soft: 252 235 241;
-  --surface-primary: #fafafc;
+  --brand: 199 32 85;
+  --brand-soft: 255 242 247;
+  --surface-primary: #ffffff;
   --surface-secondary: #f1f1f5;
   --text-primary: #24242b;
   --text-secondary: #575762;
@@ -32,9 +32,8 @@
     var(--instagram-orange) 88%,
     var(--instagram-yellow)
   );
-  /* The overlay keeps white CTA labels readable across the gradient. */
-  --cta-gradient:
-    linear-gradient(rgba(70, 7, 30, 0.32), rgba(70, 7, 30, 0.32)), var(--brand-gradient);
+  --cta-gradient: linear-gradient(110deg, #ffbddd, #ffc8c1 58%, #ffdab0);
+  --cta-text: #4d1933;
   color-scheme: light;
 }
 * {
@@ -62,8 +61,8 @@ body {
   padding-bottom: env(safe-area-inset-bottom);
   min-height: 100dvh;
   background:
-    radial-gradient(ellipse at 0 4%, rgba(225, 48, 108, 0.07), transparent 40%),
-    radial-gradient(ellipse at 100% 70%, rgba(247, 119, 55, 0.07), transparent 45%),
+    radial-gradient(ellipse at 0 4%, rgba(255, 164, 198, 0.08), transparent 40%),
+    radial-gradient(ellipse at 100% 70%, rgba(255, 196, 135, 0.08), transparent 45%),
     var(--surface-primary);
 }
 @layer components {
@@ -98,10 +97,10 @@ body {
   }
   .primary-action {
     background-image: var(--cta-gradient);
-    color: white;
+    color: var(--cta-text);
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.28),
-      0 5px 16px rgba(177, 34, 83, 0.16);
+      0 3px 10px rgba(225, 48, 108, 0.1);
     transition:
       filter 0.2s,
       transform 0.2s;
@@ -241,4 +240,8 @@ dialog[open] {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+/* Keep CTA labels readable even when older callers pass text-white. */
+.primary-action {
+  color: var(--cta-text);
 }

@@ -31,11 +31,11 @@ export function ShareService() {
     }
   }
   return (
-    <section className="glass rounded-2xl p-4">
+    <section className="rounded-2xl border border-slate-100 bg-white/80 px-4 py-2">
       <button
         type="button"
         onClick={share}
-        className="flex min-h-11 w-full items-center justify-center gap-2 text-sm font-semibold text-brand"
+        className="flex min-h-11 w-full items-center justify-center gap-2 text-sm font-medium text-slate-600"
       >
         <Share2 size={18} />
         친구에게 링크 공유하기
