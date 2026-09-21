@@ -6,17 +6,13 @@ import { PageHeader } from '@/components/layout/PageHeader';
 import { DropZone } from '@/components/upload/DropZone';
 import { GradientButton } from '@/components/ui/GradientButton';
 import { PrivacyBadge } from '@/components/common/PrivacyBadge';
-import {
-  normalizeUsername,
-  validateFileSelection,
-  parseFollowers,
-  parseFollowing,
-} from '@/lib/parser';
+import { validateFileSelection, parseFollowers, parseFollowing } from '@/lib/parser';
 import { analyze } from '@/lib/analyzer';
 import { useAnalysisStore } from '@/store/useAnalysisStore';
 import { SAMPLE_FOLLOWERS_JSON, SAMPLE_FOLLOWING_JSON } from '@/lib/sample-data';
 import type { AnalysisResult } from '@/types';
 import { trackSafeEvent } from '@/lib/analytics';
+import { accountLabel } from '@/lib/account-label';
 
 const today = () => {
   const now = new Date();
@@ -25,8 +21,15 @@ const today = () => {
 export default function UploadPage() {
   const router = useRouter();
   const setCurrent = useAnalysisStore((s) => s.setCurrent);
+  const history = useAnalysisStore((s) => s.history);
+  const savedAccounts = history.filter(
+    (record, index, all) =>
+      record.account &&
+      !record.isSample &&
+      all.findIndex((other) => other.account === record.account) === index,
+  );
   const [files, setFiles] = useState<File[]>([]);
-  const [account, setAccount] = useState('');
+  const [previousAccount, setPreviousAccount] = useState('');
   const [snapshotDate, setSnapshotDate] = useState(today);
   const [complete, setComplete] = useState(false);
   const [persist, setPersist] = useState(false);
@@ -47,7 +50,10 @@ export default function UploadPage() {
     setError(null);
     const token = ++request.current;
     try {
-      const owner = normalizeUsername(account);
+      const owner =
+        persist && savedAccounts.some((record) => record.account === previousAccount)
+          ? previousAccount
+          : `local:${crypto.randomUUID()}`;
       validateFileSelection(files);
       if (!complete) throw new Error('전체 기간으로 받은 모든 파일인지 확인해주세요.');
       if (
@@ -109,11 +115,6 @@ export default function UploadPage() {
         >
           파일이 아직 없나요? 다운로드 방법 보기 →
         </Link>
-        <p className="text-sm text-slate-600">
-          ZIP 압축을 풀어 <b>following.json 1개</b>와{' '}
-          <b>followers_1.json, followers_2.json 등 모든 팔로워 파일</b>을 선택해주세요. 파일당 20MB,
-          전체 50MB까지 가능합니다.
-        </p>
         <fieldset disabled={running} className="space-y-5 disabled:opacity-60">
           <DropZone
             files={files}
@@ -123,23 +124,7 @@ export default function UploadPage() {
               setError(null);
             }}
           />
-          <label className="block text-sm font-medium">
-            내 인스타그램 아이디
-            <input
-              required
-              value={account}
-              onChange={(e) => setAccount(e.target.value)}
-              autoComplete="off"
-              autoCapitalize="none"
-              spellCheck={false}
-              maxLength={31}
-              placeholder="예: jonghyun0000"
-              className="field mt-2"
-            />
-            <span className="block mt-2 text-xs text-slate-600">
-              로그인에 사용하지 않습니다. 다른 계정의 기록과 섞이지 않도록 구분합니다.
-            </span>
-          </label>
+          <p className="text-xs text-slate-600">파일당 20MB · 전체 50MB까지 선택할 수 있어요.</p>
           <label className="block text-sm font-medium">
             데이터 기준일
             <input
@@ -151,8 +136,7 @@ export default function UploadPage() {
               className="field mt-2"
             />
             <span className="block mt-2 text-xs text-slate-600">
-              인스타그램에서 이 파일을 만든 날짜를 입력하세요. 같은 아이디와 날짜로 저장한 기록이
-              있으면 새 기록으로 바뀝니다.
+              인스타그램에서 이 파일을 만든 날짜를 입력하세요.
             </span>
           </label>
           <label className="flex gap-3 text-sm leading-relaxed">
@@ -162,11 +146,10 @@ export default function UploadPage() {
               checked={complete}
               onChange={(e) => setComplete(e.target.checked)}
             />
-            전체 기간으로 요청한 같은 계정의 파일이며, 모든 팔로워 파일을 선택했습니다.
+            전체 기간으로 요청한 같은 계정의 파일을 모두 선택했어요.
           </label>
           <p className="text-xs text-slate-600">
-            파일이 빠지거나 다른 날짜에 받은 파일이 섞이면 결과가 부정확할 수 있습니다. 다운로드한
-            폴더와 선택한 파일 목록을 한 번 더 비교해주세요.
+            파일이 빠지거나 다른 날짜의 파일이 섞이면 결과가 달라질 수 있어요.
           </p>
           <label className="flex gap-3 text-sm leading-relaxed">
             <input
@@ -175,8 +158,36 @@ export default function UploadPage() {
               checked={persist}
               onChange={(e) => setPersist(e.target.checked)}
             />
-            이 기기에 분석 기록 저장 (계정별 최근 10개). 이후 팔로워 변화를 비교할 수 있습니다.
+            이 기기에 분석 기록 저장
           </label>
+          {persist && (
+            <div className="rounded-2xl bg-brand-soft p-4 space-y-3">
+              {savedAccounts.length > 0 && (
+                <label className="block text-sm font-medium">
+                  저장할 기록
+                  <select
+                    className="field mt-2"
+                    value={previousAccount}
+                    onChange={(event) => setPreviousAccount(event.target.value)}
+                  >
+                    <option value="">새 기록으로 저장</option>
+                    {savedAccounts.map((record) => (
+                      <option key={record.account} value={record.account!}>
+                        {accountLabel(record.account)} · {record.snapshotDate} · 팔로워{' '}
+                        {record.followers.length}명에 이어 저장
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              )}
+              <p className="text-xs leading-relaxed text-slate-600">
+                {previousAccount
+                  ? '같은 인스타그램 계정의 파일일 때만 이어 저장하세요. 날짜가 다르면 변화를 비교하고, 같은 날짜면 기존 기록을 바꿉니다.'
+                  : '아이디 입력 없이 별도 기록으로 저장합니다. 다음 분석에서 이 기록을 선택하면 변화를 비교할 수 있어요.'}{' '}
+                각 기록 묶음은 최근 10개까지 보관합니다.
+              </p>
+            </div>
+          )}
         </fieldset>
         {error && (
           <p

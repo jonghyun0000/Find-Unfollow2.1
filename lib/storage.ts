@@ -2,6 +2,7 @@ import { openDB, type DBSchema, type IDBPDatabase, type IDBPTransaction } from '
 import type { AnalysisResult, InstaUser, Snapshot } from '@/types';
 import { analyze } from '@/lib/analyzer';
 import { MAX_USERS, normalizeUsername } from '@/lib/parser';
+import { isLocalAccount } from '@/lib/account-label';
 
 const LEGACY_KEY = 'insta-analyzer:v1';
 const MAX_HISTORY = 10;
@@ -78,7 +79,12 @@ export function restoreSnapshot(value: unknown, legacy = false): AnalysisResult 
     id: v.id,
     createdAt: v.createdAt,
     snapshotDate,
-    account: legacy || v.account === null ? null : normalizeUsername(v.account),
+    account:
+      legacy || v.account === null
+        ? null
+        : isLocalAccount(v.account)
+          ? v.account
+          : normalizeUsername(v.account),
   });
 }
 function compact(result: AnalysisResult): Snapshot {

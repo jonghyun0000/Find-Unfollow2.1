@@ -17,7 +17,6 @@ test('filters show reasons, restore hidden accounts, and export only visible res
     },
     { name: 'followers_1.json', mimeType: 'application/json', buffer: Buffer.from('[]') },
   ]);
-  await page.getByLabel('내 인스타그램 아이디', { exact: false }).fill('tester');
   await page.getByRole('checkbox', { name: /전체 기간/ }).check();
   await page.getByRole('button', { name: '분석 시작', exact: true }).click();
   await page.getByRole('link', { name: /팔로우 관계 전체 보기/ }).click();

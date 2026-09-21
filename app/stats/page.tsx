@@ -1,4 +1,5 @@
 'use client';
+import { accountLabel } from '@/lib/account-label';
 import dynamic from 'next/dynamic';
 import { useAnalysisStore } from '@/store/useAnalysisStore';
 import { ResultEmpty } from '@/components/analysis/ResultEmpty';
@@ -24,7 +25,7 @@ export default function StatsPage() {
     <>
       <PageHeader
         title="통계"
-        subtitle={`${current.account ? '@' + current.account : '이전 버전 기록'} · ${records.length}개 저장 기록`}
+        subtitle={`${accountLabel(current.account)} · ${records.length}개 저장 기록`}
         back
       />
       <div className="page-shell py-5 space-y-5">

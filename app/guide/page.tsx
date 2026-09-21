@@ -219,13 +219,13 @@ export default function GuidePage() {
             </p>
           </div>
           <p>
-            아래 <strong>파일 선택하러 가기</strong>를 누른 뒤 <strong>JSON 파일 선택</strong>에서
+            아래 <strong>파일 선택하러 가기</strong>를 누른 뒤 <strong>파일 선택하기</strong>에서
             이 파일들을 고르세요. 여러 개를 한 번에 선택하기 어렵다면 버튼을 다시 눌러 하나씩 추가할
             수 있습니다.
           </p>
           <p>
-            내 아이디와 <strong>인스타그램에서 파일을 만든 날짜</strong>를 입력하고, 모든 파일을
-            선택했는지 확인한 뒤 <strong>분석 시작</strong>을 누르세요.
+            <strong>인스타그램에서 파일을 만든 날짜</strong>를 확인하고, 모든 파일을 선택했는지
+            확인한 뒤 <strong>분석 시작</strong>을 누르세요.
           </p>
         </Step>
         <section className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">

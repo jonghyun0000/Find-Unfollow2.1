@@ -14,9 +14,9 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const sizes: Record<NonNullable<Props['size']>, string> = {
-  sm: 'h-9 px-4 text-sm rounded-xl',
-  md: 'h-11 px-5 text-[15px] rounded-2xl',
-  lg: 'h-14 px-7 text-base rounded-2xl',
+  sm: 'min-h-11 px-4 text-sm rounded-xl',
+  md: 'min-h-12 px-5 text-[15px] rounded-2xl',
+  lg: 'min-h-14 px-7 text-base rounded-2xl',
 };
 
 const variants: Record<Variant, string> = {

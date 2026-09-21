@@ -1,4 +1,5 @@
 'use client';
+import { accountLabel } from '@/lib/account-label';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { PageHeader } from '@/components/layout/PageHeader';
@@ -18,13 +19,11 @@ export default function HistoryPage() {
     );
   return (
     <>
-      <PageHeader title="분석 기록" subtitle="계정별 최대 10개 · 이 기기에만 저장" back />
+      <PageHeader title="분석 기록" subtitle="기록 묶음별 최대 10개 · 이 기기에만 저장" back />
       <div className="page-shell py-6 space-y-3">
         {history.map((h) => (
           <article key={h.id} className="glass rounded-2xl p-5">
-            <h2 className="font-semibold break-all">
-              {h.account ? '@' + h.account : '이전 버전 기록 (비교 제외)'}
-            </h2>
+            <h2 className="font-semibold break-all">{accountLabel(h.account)}</h2>
             <p className="mt-1 text-sm text-slate-600">데이터 기준일 {h.snapshotDate}</p>
             <p className="mt-1 text-xs text-slate-600">
               팔로워 {h.followers.length.toLocaleString()} · 팔로잉{' '}
