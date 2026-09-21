@@ -31,12 +31,30 @@ export default function PrivacyPage() {
           </p>
         </section>
         <section>
+          <h2 className="text-lg font-semibold text-slate-900">익명 사용 통계</h2>
+          <p className="mt-2">
+            서비스 개선을 위해 Vercel Web Analytics로 방문 페이지, 접속 경로, 브라우저·기기 종류,
+            국가 수준의 대략적인 지역과 분석 완료·공유 버튼·설치 수락·홈 화면 실행 여부를 확인할 수
+            있습니다. 제3자 광고 쿠키를 사용하지 않으며 통계로 개인을 식별하려고 하지 않습니다.
+            인스타그램 아이디, 파일 이름과 내용, 팔로워·팔로잉 목록, 분석 인원수와 결과는 통계에
+            보내지 않습니다. 주소의 검색어와 해시 값도 전송 전에 제거합니다. 자세한 처리 방식은{' '}
+            <a
+              className="underline"
+              href="https://vercel.com/docs/analytics/privacy-policy"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Vercel Web Analytics 개인정보 안내 (새 탭)
+            </a>
+            에서 확인할 수 있습니다.
+          </p>
+        </section>
+        <section>
           <h2 className="text-lg font-semibold text-slate-900">네트워크 연결</h2>
           <p className="mt-2">
             웹페이지와 앱 파일을 받기 위해 호스팅 서버에 연결합니다. 요청에 따른 일반적인 접속
-            정보는 호스팅 환경에서 처리될 수 있습니다. 광고·분석 추적 도구나 외부 폰트를 사용하지
-            않습니다. 계정 링크를 누르면 Instagram이 새 탭에서 열리며 해당 사이트의 정책이
-            적용됩니다.
+            정보는 호스팅 환경에서 처리될 수 있습니다. 외부 폰트는 사용하지 않습니다. 계정 링크를
+            누르면 Instagram이 새 탭에서 열리며 해당 사이트의 정책이 적용됩니다.
           </p>
         </section>
         <section>

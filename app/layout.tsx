@@ -6,6 +6,7 @@ import './globals.css';
 import { ServiceWorker } from '@/components/common/ServiceWorker';
 import { BottomNav } from '@/components/layout/BottomNav';
 import { StoreHydrator } from '@/components/common/StoreHydrator';
+import { UsageAnalytics } from '@/components/common/UsageAnalytics';
 
 export const metadata: Metadata = {
   title: 'Unfollow Lens · 인스타 팔로우 관계 분석',
@@ -41,6 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </a>
         <StoreHydrator />
         <ServiceWorker />
+        <UsageAnalytics />
         <main id="main-content" className="with-bottom-nav relative">
           {children}
         </main>
