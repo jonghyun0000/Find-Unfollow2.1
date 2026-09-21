@@ -1,7 +1,6 @@
 // components/stats/StatCard.tsx
 'use client';
 
-import { motion } from 'framer-motion';
 import { cn } from '@/lib/cn';
 
 interface Props {
@@ -14,11 +13,11 @@ interface Props {
 }
 
 const accents = {
-  pink: 'from-ig-pink/30 to-transparent text-ig-pink',
-  purple: 'from-accent-purple/30 to-transparent text-accent-purple',
-  amber: 'from-amber-500/25 to-transparent text-amber-700',
-  emerald: 'from-emerald-500/25 to-transparent text-emerald-700',
-  rose: 'from-rose-500/25 to-transparent text-rose-700',
+  pink: 'text-brand',
+  purple: 'text-slate-900',
+  amber: 'text-slate-900',
+  emerald: 'text-slate-900',
+  rose: 'text-brand',
 };
 
 export function StatCard({ label, value, delta, icon, accent = 'pink', className }: Props) {
@@ -26,23 +25,25 @@ export function StatCard({ label, value, delta, icon, accent = 'pink', className
     typeof delta === 'number' ? (delta > 0 ? `+${delta}` : delta < 0 ? `${delta}` : '±0') : null;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className={cn('relative glass rounded-3xl p-5 overflow-hidden', className)}
-    >
-      <div
-        className={cn(
-          'absolute inset-0 bg-gradient-to-br pointer-events-none opacity-50',
-          accents[accent],
+    <div className={cn('relative glass rounded-3xl p-5 overflow-hidden', className)}>
+      <div className="relative">
+        {icon && (
+          <div className="mb-4 grid size-9 place-items-center rounded-xl border border-white bg-white/70 text-slate-600">
+            {icon}
+          </div>
         )}
-      />
-      <div className="relative flex items-start justify-between">
         <div>
           <p className="text-[12.5px] uppercase tracking-wider text-slate-600 font-medium">
             {label}
           </p>
-          <p className="mt-2 text-3xl font-bold tracking-tight">{value}</p>
+          <p
+            className={cn(
+              'mt-2 text-4xl font-semibold tracking-tight tabular-nums',
+              accents[accent],
+            )}
+          >
+            {value}
+          </p>
           {deltaText !== null && (
             <p
               className={cn(
@@ -58,8 +59,7 @@ export function StatCard({ label, value, delta, icon, accent = 'pink', className
             </p>
           )}
         </div>
-        {icon && <div className="text-slate-600">{icon}</div>}
       </div>
-    </motion.div>
+    </div>
   );
 }

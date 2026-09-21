@@ -3,7 +3,7 @@ export default function PrivacyPage() {
   return (
     <>
       <PageHeader title="데이터 처리 안내" back />
-      <article className="mx-auto max-w-md px-5 py-6 space-y-6 text-sm leading-relaxed text-slate-600">
+      <article className="page-shell py-6 space-y-6 text-sm leading-relaxed text-slate-600">
         <section>
           <h2 className="text-lg font-semibold text-slate-900">파일은 기기에서 분석합니다</h2>
           <p className="mt-2">

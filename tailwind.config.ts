@@ -5,11 +5,12 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        brand: '#6554C0',
+        brand: 'rgb(var(--brand) / <alpha-value>)',
+        'brand-soft': 'rgb(var(--brand-soft) / <alpha-value>)',
         // Accent palette
         ig: {
           purple: '#833AB4',
-          pink: '#6554C0',
+          pink: 'var(--instagram-pink)',
           orange: '#F77737',
           yellow: '#FCAF45',
         },
@@ -48,8 +49,8 @@ const config: Config = {
           'radial-gradient(at 20% 10%, rgba(168,85,247,0.25) 0px, transparent 50%), radial-gradient(at 80% 0%, rgba(236,72,153,0.22) 0px, transparent 45%), radial-gradient(at 50% 100%, rgba(131,58,180,0.18) 0px, transparent 55%)',
       },
       boxShadow: {
-        glass: '0 2px 8px rgba(30, 41, 59, 0.03)',
-        glow: '0 2px 4px rgba(101,84,192,0.12)',
+        glass: 'var(--glass-shadow)',
+        glow: '0 4px 16px rgb(var(--brand) / .12)',
       },
       backdropBlur: {
         xs: '2px',

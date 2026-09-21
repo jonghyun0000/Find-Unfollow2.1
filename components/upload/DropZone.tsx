@@ -26,7 +26,7 @@ export function DropZone({ files, onFilesChange }: Props) {
         }}
         className={cn(
           'block cursor-pointer rounded-3xl p-6 border-2 border-dashed text-center',
-          hover ? 'border-ig-pink bg-ig-soft' : 'border-slate-200 bg-slate-100',
+          hover ? 'border-brand bg-brand-soft' : 'border-slate-300 bg-white/70',
         )}
       >
         <Upload className="mx-auto mb-3 text-ig-pink" aria-hidden />

@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Upload, BarChart3, Users2, Settings } from 'lucide-react';
-import { motion } from 'framer-motion';
+
 import { cn } from '@/lib/cn';
 
 const items = [
@@ -24,7 +24,7 @@ export function BottomNav() {
       className="fixed bottom-0 inset-x-0 z-40 px-3 pb-3"
       style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 12px)' }}
     >
-      <div className="mx-auto max-w-md rounded-3xl border border-slate-200 bg-white shadow-glass backdrop-blur-xl px-2 py-2">
+      <div className="glass-strong mx-auto max-w-md rounded-[28px] px-2 py-2">
         <ul className="grid grid-cols-5">
           {items.map(({ href, label, icon: Icon }) => {
             const active = pathname === href || (href !== '/' && pathname.startsWith(href));
@@ -39,11 +39,7 @@ export function BottomNav() {
                   aria-current={active ? 'page' : undefined}
                 >
                   {active && (
-                    <motion.span
-                      layoutId="bottom-nav-pill"
-                      className="absolute inset-1 rounded-2xl bg-violet-100"
-                      transition={{ type: 'spring', stiffness: 380, damping: 32 }}
-                    />
+                    <span className="absolute inset-1 rounded-2xl bg-brand-soft border border-white shadow-sm" />
                   )}
                   <Icon size={20} className="relative z-10" strokeWidth={active ? 2.4 : 2} />
                   <span className="relative z-10">{label}</span>

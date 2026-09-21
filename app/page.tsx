@@ -9,10 +9,10 @@ const features = [
 ];
 export default function LandingPage() {
   return (
-    <div className="mx-auto max-w-md px-5 pb-8 pt-7">
+    <div className="page-shell pb-8 pt-7">
       <header className="flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 text-base font-bold tracking-tight">
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-brand text-white">
+          <span className="grid h-9 w-9 place-items-center rounded-xl brand-mark text-white">
             <ScanLine size={21} />
           </span>
           Unfollow Lens
@@ -21,12 +21,12 @@ export default function LandingPage() {
           사용 가이드
         </Link>
       </header>
-      <section className="pb-7 pt-10">
+      <section className="landing-hero pb-8 pt-12 sm:pb-10 sm:pt-16">
         <p className="flex items-center gap-2 text-xs font-medium text-brand">
           <span className="h-1.5 w-1.5 rounded-full bg-brand" />
           무료로, 로그인 없이
         </p>
-        <h1 className="mt-4 text-[34px] font-bold leading-[1.3] tracking-tight">
+        <h1 className="mt-5 text-[38px] font-bold leading-[1.25] tracking-[-0.04em] sm:text-5xl">
           내 팔로우 관계,
           <br />
           <span className="text-brand">한눈에 깔끔하게.</span>
@@ -38,7 +38,7 @@ export default function LandingPage() {
         </p>
         <Link
           href="/upload"
-          className="mt-6 flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-brand px-5 py-4 font-semibold text-white transition hover:brightness-110"
+          className="primary-action mt-7 flex min-h-14 items-center justify-center gap-2 rounded-2xl px-5 py-4 font-semibold"
         >
           내 데이터 분석하기 <ArrowRight size={18} />
         </Link>
@@ -58,7 +58,7 @@ export default function LandingPage() {
         <h2 id="features" className="mb-4 text-sm font-semibold">
           필요한 정보만, 간단하게
         </h2>
-        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+        <div className="glass overflow-hidden rounded-3xl">
           {features.map(({ icon: Icon, title, body }) => (
             <article
               key={title}

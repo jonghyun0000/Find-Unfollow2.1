@@ -15,10 +15,10 @@ export function UserCard({
   reasonFor,
 }: { user: InstaUser; badge?: string } & ReviewProps) {
   return (
-    <li className="glass rounded-2xl p-4 flex flex-wrap items-center gap-3">
+    <li className="surface-row rounded-2xl p-4 flex flex-wrap items-center gap-3">
       <span
         aria-hidden
-        className="grid place-items-center size-10 shrink-0 rounded-full bg-brand text-white font-semibold"
+        className="grid place-items-center size-11 shrink-0 rounded-full border border-white bg-brand-soft text-brand font-semibold"
       >
         {user.username[0].toUpperCase()}
       </span>

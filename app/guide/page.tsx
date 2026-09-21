@@ -16,7 +16,7 @@ function Step({
   return (
     <section id={id} className="glass scroll-mt-24 rounded-2xl p-5">
       <h2 className="flex items-start gap-3 font-semibold">
-        <span className="grid size-7 shrink-0 place-items-center rounded-full bg-violet-100 text-sm text-brand">
+        <span className="grid size-7 shrink-0 place-items-center rounded-full bg-brand-soft text-sm text-brand">
           {number}
         </span>
         <span className="pt-0.5">{title}</span>
@@ -72,7 +72,7 @@ export default function GuidePage() {
             href="https://accountscenter.instagram.com/info_and_permissions/dyi/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 rounded-xl bg-violet-50 px-3 py-3 font-semibold text-brand"
+            className="flex items-center justify-center gap-2 rounded-xl bg-brand-soft px-3 py-3 font-semibold text-brand"
           >
             정보 다운로드 페이지 열기 <ExternalLink size={16} />
             <span className="sr-only">(새 탭)</span>
@@ -109,8 +109,8 @@ export default function GuidePage() {
           </p>
         </Step>
         <Step number={4} title="기간과 형식을 바꾸고 요청하세요">
-          <dl className="overflow-hidden rounded-xl border border-violet-200 bg-violet-50">
-            <div className="flex justify-between border-b border-violet-200 px-4 py-3">
+          <dl className="overflow-hidden rounded-xl border border-brand/15 bg-brand-soft">
+            <div className="flex justify-between border-b border-brand/15 px-4 py-3">
               <dt>날짜 범위</dt>
               <dd className="font-bold text-brand">전체 기간</dd>
             </div>
@@ -275,7 +275,7 @@ export default function GuidePage() {
         </section>
         <Link
           href="/upload"
-          className="block rounded-2xl bg-brand p-4 text-center font-semibold text-white"
+          className="block rounded-2xl primary-action p-4 text-center font-semibold text-white"
         >
           파일 선택하러 가기
         </Link>

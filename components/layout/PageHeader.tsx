@@ -16,13 +16,8 @@ interface Props {
 export function PageHeader({ title, subtitle, back, right, className }: Props) {
   const router = useRouter();
   return (
-    <header
-      className={cn(
-        'sticky top-0 z-30 backdrop-blur-xl bg-white border-b border-slate-200',
-        className,
-      )}
-    >
-      <div className="mx-auto max-w-md px-5 py-4 flex items-center gap-3">
+    <header className={cn('glass-strong sticky top-0 z-30', className)}>
+      <div className="page-shell py-4 flex items-center gap-3">
         {back && (
           <button
             onClick={() => router.back()}

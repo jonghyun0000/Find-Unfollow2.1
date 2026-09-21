@@ -2,7 +2,6 @@
 'use client';
 
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 
 interface Props {
   icon: React.ReactNode;
@@ -14,11 +13,7 @@ interface Props {
 
 export function EmptyState({ icon, title, description, ctaLabel, ctaHref }: Props) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="glass rounded-3xl p-8 text-center"
-    >
+    <div className="glass rounded-3xl p-8 text-center">
       <div className="mx-auto mb-5 grid place-items-center w-16 h-16 rounded-2xl bg-ig-soft border border-slate-200 text-ig-pink">
         {icon}
       </div>
@@ -31,6 +26,6 @@ export function EmptyState({ icon, title, description, ctaLabel, ctaHref }: Prop
           {ctaLabel}
         </Link>
       )}
-    </motion.div>
+    </div>
   );
 }

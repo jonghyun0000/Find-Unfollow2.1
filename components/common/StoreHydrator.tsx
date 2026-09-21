@@ -10,7 +10,7 @@ export function StoreHydrator() {
     void hydrate();
   }, [hydrate]);
   return (
-    <div className="mx-auto max-w-md px-5">
+    <div className="page-shell">
       {warning && (
         <p
           role="alert"
@@ -20,7 +20,7 @@ export function StoreHydrator() {
         </p>
       )}
       {sample && (
-        <p role="status" className="my-3 rounded-xl bg-purple-500/15 p-3 text-sm">
+        <p role="status" className="my-3 rounded-xl bg-brand-soft p-3 text-sm">
           샘플 데이터 체험 중 · 저장하거나 실제 기록과 비교하지 않습니다.{' '}
           <Link href="/upload" className="underline">
             내 데이터 분석
