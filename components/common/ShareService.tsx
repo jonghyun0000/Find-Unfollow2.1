@@ -1,10 +1,12 @@
 'use client';
 import { useState } from 'react';
 import { Share2 } from 'lucide-react';
+import { trackSafeEvent } from '@/lib/analytics';
 export function ShareService() {
   const [message, setMessage] = useState('');
   const [fallback, setFallback] = useState('');
   async function share() {
+    trackSafeEvent('share_button_clicked');
     const url = new URL(
       '/?utm_source=hallym&utm_medium=share&utm_campaign=campus_launch',
       window.location.origin,

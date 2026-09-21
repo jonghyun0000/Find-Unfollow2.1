@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { ArrowDownToLine, Check, Plus, Share, Smartphone, X } from 'lucide-react';
+import { trackSafeEvent } from '@/lib/analytics';
 
 type InstallEvent = Event & {
   prompt: () => Promise<void>;
@@ -77,6 +78,7 @@ export function InstallGuide() {
     try {
       await event.prompt();
       const choice = await event.userChoice;
+      if (choice.outcome === 'accepted') trackSafeEvent('install_prompt_accepted');
       setMessage(
         choice.outcome === 'accepted'
           ? '설치를 요청했습니다. 기기의 홈 화면이나 앱 목록을 확인해주세요.'

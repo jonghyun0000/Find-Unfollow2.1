@@ -16,6 +16,7 @@ import { analyze } from '@/lib/analyzer';
 import { useAnalysisStore } from '@/store/useAnalysisStore';
 import { SAMPLE_FOLLOWERS_JSON, SAMPLE_FOLLOWING_JSON } from '@/lib/sample-data';
 import type { AnalysisResult } from '@/types';
+import { trackSafeEvent } from '@/lib/analytics';
 
 const today = () => {
   const now = new Date();
@@ -76,6 +77,7 @@ export default function UploadPage() {
       });
       if (token !== request.current) return;
       await setCurrent(result, { persist });
+      trackSafeEvent('analysis_completed');
       if (token === request.current) router.push('/dashboard');
     } catch (e) {
       if (token === request.current)
