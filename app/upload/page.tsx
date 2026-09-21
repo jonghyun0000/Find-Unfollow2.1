@@ -101,11 +101,11 @@ export default function UploadPage() {
   return (
     <>
       <PageHeader title="데이터 분석" subtitle="인스타그램에서 받은 파일을 선택해주세요" back />
-      <form onSubmit={runAnalysis} className="mx-auto max-w-md px-5 py-6 space-y-5">
+      <form onSubmit={runAnalysis} className="page-shell py-6 space-y-5">
         <PrivacyBadge />
         <Link
           href="/guide"
-          className="block rounded-2xl border border-violet-200 bg-violet-50 p-4 text-sm font-semibold text-brand"
+          className="block rounded-2xl border border-brand/15 bg-brand-soft p-4 text-sm font-semibold text-brand"
         >
           파일이 아직 없나요? 다운로드 방법 보기 →
         </Link>

@@ -74,7 +74,7 @@ function Inner({ mode }: { mode: 'relationships' | 'changes' | 'mutuals' }) {
         subtitle={`${current.account ? '@' + current.account : '이전 버전 기록'} · ${current.snapshotDate}`}
         back
       />
-      <div className="mx-auto max-w-md px-5 py-5 space-y-4">
+      <div className="page-shell py-5 space-y-4">
         <nav aria-label="목록 선택" className="flex flex-wrap gap-2">
           {groups.map((g) => (
             <Link
@@ -104,7 +104,7 @@ function Inner({ mode }: { mode: 'relationships' | 'changes' | 'mutuals' }) {
                 type="checkbox"
                 checked={hallym}
                 onChange={(e) => setHallym(e.target.checked)}
-                className="size-5 accent-violet-600"
+                className="size-5 accent-brand"
               />
               hallym이 포함된 아이디 숨기기
             </label>
@@ -113,7 +113,7 @@ function Inner({ mode }: { mode: 'relationships' | 'changes' | 'mutuals' }) {
                 type="checkbox"
                 checked={official}
                 onChange={(e) => setOfficial(e.target.checked)}
-                className="size-5 accent-violet-600"
+                className="size-5 accent-brand"
               />
               official이 포함된 아이디 숨기기
             </label>

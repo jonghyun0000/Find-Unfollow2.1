@@ -117,7 +117,7 @@ export function InstallGuide() {
       <button
         ref={trigger}
         onClick={openGuide}
-        className="flex w-full items-center gap-3 rounded-2xl border border-violet-200 bg-violet-50 p-4 text-left"
+        className="flex w-full items-center gap-3 rounded-2xl glass-control p-4 text-left"
       >
         <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white text-brand">
           <Smartphone size={23} />
@@ -152,10 +152,10 @@ export function InstallGuide() {
               dialog.current.close();
           }
         }}
-        className="w-[calc(100%-32px)] max-w-md max-h-[85dvh] rounded-3xl bg-white p-6 text-slate-900 shadow-xl"
+        className="w-[calc(100%-32px)] max-w-md max-h-[85dvh] rounded-3xl p-6 text-slate-900"
       >
         <div className="flex items-center justify-between">
-          <span className="grid h-12 w-12 place-items-center rounded-2xl bg-violet-100 text-brand">
+          <span className="grid h-12 w-12 place-items-center rounded-2xl bg-brand-soft text-brand">
             <Smartphone size={26} />
           </span>
           <button
@@ -182,7 +182,7 @@ export function InstallGuide() {
             <button
               disabled={pending}
               onClick={install}
-              className="mt-5 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-brand p-3 font-semibold text-white disabled:opacity-50"
+              className="mt-5 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl primary-action p-3 font-semibold text-white disabled:opacity-50"
             >
               <ArrowDownToLine size={18} />
               {pending ? '설치 확인 중…' : '앱 설치하기'}
@@ -204,7 +204,7 @@ export function InstallGuide() {
         <ol className="mt-5 space-y-4">
           {steps.map((step, index) => (
             <li key={step} className="flex gap-3 text-sm leading-relaxed">
-              <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-violet-50 text-xs font-bold text-brand">
+              <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-brand-soft text-xs font-bold text-brand">
                 {index + 1}
               </span>
               <span>

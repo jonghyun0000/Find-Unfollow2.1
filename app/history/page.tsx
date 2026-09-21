@@ -19,7 +19,7 @@ export default function HistoryPage() {
   return (
     <>
       <PageHeader title="분석 기록" subtitle="계정별 최대 10개 · 이 기기에만 저장" back />
-      <div className="mx-auto max-w-md px-5 py-6 space-y-3">
+      <div className="page-shell py-6 space-y-3">
         {history.map((h) => (
           <article key={h.id} className="glass rounded-2xl p-5">
             <h2 className="font-semibold break-all">

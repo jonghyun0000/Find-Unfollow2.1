@@ -16,7 +16,7 @@ export default function DashboardPage() {
         title="분석 결과"
         subtitle={`${current.account ? '@' + current.account : '이전 버전 기록'} · 기준일 ${current.snapshotDate}`}
       />
-      <div className="mx-auto max-w-md px-5 py-5 space-y-5">
+      <div className="page-shell py-5 space-y-5">
         {!current.isSample && !history.some((h) => h.id === current.id) && (
           <p className="text-sm text-slate-600">
             이 결과는 저장되지 않았습니다. 새로고침하거나 앱을 닫으면 사라집니다.
@@ -115,7 +115,7 @@ export default function DashboardPage() {
         </Link>
         <Link
           href="/upload"
-          className="block rounded-2xl bg-brand text-white p-4 text-center font-semibold"
+          className="block rounded-2xl primary-action text-white p-4 text-center font-semibold"
         >
           새 데이터 분석하기
         </Link>

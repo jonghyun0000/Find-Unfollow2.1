@@ -2,11 +2,20 @@
 // 모든 페이지의 공통 레이아웃. PWA 메타, 하단 네비.
 
 import type { Metadata, Viewport } from 'next';
+import localFont from 'next/font/local';
 import './globals.css';
 import { ServiceWorker } from '@/components/common/ServiceWorker';
 import { BottomNav } from '@/components/layout/BottomNav';
 import { StoreHydrator } from '@/components/common/StoreHydrator';
 import { UsageAnalytics } from '@/components/common/UsageAnalytics';
+
+const pretendard = localFont({
+  src: './fonts/PretendardVariable.woff2',
+  variable: '--font-pretendard',
+  display: 'swap',
+  weight: '100 900',
+  preload: false,
+});
 
 export const metadata: Metadata = {
   title: 'Unfollow Lens · 인스타 팔로우 관계 분석',
@@ -30,12 +39,12 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-  themeColor: '#F7F8FA',
+  themeColor: '#FAFAFC',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko">
+    <html lang="ko" className={pretendard.variable}>
       <body className="min-h-screen antialiased">
         <a href="#main-content" className="sr-only focus:not-sr-only focus:block focus:p-4">
           본문으로 건너뛰기

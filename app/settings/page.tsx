@@ -12,7 +12,7 @@ export default function SettingsPage() {
   return (
     <>
       <PageHeader title="설정" />
-      <div className="mx-auto max-w-md px-5 py-6 space-y-4">
+      <div className="page-shell py-6 space-y-4">
         <InstallGuide />
         {[
           ['/history', `분석 기록 · ${history.length}개`],

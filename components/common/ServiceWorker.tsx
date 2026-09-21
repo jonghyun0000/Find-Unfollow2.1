@@ -36,7 +36,7 @@ export function ServiceWorker() {
     };
   }, []);
   return update ? (
-    <aside className="mx-auto max-w-md px-5 py-3 text-sm" role="status">
+    <aside className="page-shell py-3 text-sm" role="status">
       새 버전을 사용할 수 있습니다. 저장하지 않은 결과는 새로고침하면 사라집니다.{' '}
       <button
         className="mt-2 rounded-lg bg-slate-100 p-3 font-semibold"

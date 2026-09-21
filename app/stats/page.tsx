@@ -27,7 +27,7 @@ export default function StatsPage() {
         subtitle={`${current.account ? '@' + current.account : '이전 버전 기록'} · ${records.length}개 저장 기록`}
         back
       />
-      <div className="mx-auto max-w-md px-5 py-5 space-y-5">
+      <div className="page-shell py-5 space-y-5">
         <GlassCard>
           <h2 className="font-semibold">데이터 기준일별 변화</h2>
           {records.length >= 2 ? (

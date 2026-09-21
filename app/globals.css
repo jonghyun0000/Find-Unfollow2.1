@@ -3,78 +3,234 @@
 @tailwind utilities;
 
 :root {
-  --bg: #f7f8fa;
-  --fg: #202735;
+  --instagram-pink: #e1306c;
+  --instagram-magenta: #c13584;
+  --instagram-purple: #833ab4;
+  --instagram-red: #fd1d1d;
+  --instagram-orange: #f77737;
+  --instagram-yellow: #fcaf45;
+  --brand: 177 34 83;
+  --brand-soft: 252 235 241;
+  --surface-primary: #fafafc;
+  --surface-secondary: #f1f1f5;
+  --text-primary: #24242b;
+  --text-secondary: #575762;
+  --glass-bg: rgba(255, 255, 255, 0.74);
+  --glass-bg-strong: rgba(255, 255, 255, 0.9);
+  --glass-border: rgba(255, 255, 255, 0.92);
+  --glass-highlight: inset 0 1px 0 white, inset 0 -1px 0 rgba(255, 255, 255, 0.5);
+  --glass-shadow: 0 8px 30px rgba(54, 30, 43, 0.045), 0 1px 3px rgba(54, 30, 43, 0.04);
+  --glass-blur: 16px;
+  --line: #e7e4e9;
+  --chart-secondary: #747482;
+  --brand-gradient: linear-gradient(
+    115deg,
+    var(--instagram-purple),
+    var(--instagram-magenta) 28%,
+    var(--instagram-pink) 50%,
+    var(--instagram-red) 72%,
+    var(--instagram-orange) 88%,
+    var(--instagram-yellow)
+  );
+  /* The overlay keeps white CTA labels readable across the gradient. */
+  --cta-gradient:
+    linear-gradient(rgba(70, 7, 30, 0.32), rgba(70, 7, 30, 0.32)), var(--brand-gradient);
   color-scheme: light;
 }
 * {
   -webkit-tap-highlight-color: transparent;
 }
-html,
+html {
+  background: var(--surface-primary);
+}
 body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  color: var(--text-primary);
+  font-family:
+    var(--font-pretendard),
+    'Pretendard Variable',
+    Pretendard,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Apple SD Gothic Neo',
+    'Segoe UI',
+    system-ui,
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   word-break: keep-all;
   overflow-wrap: anywhere;
-}
-body {
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
+  min-height: 100dvh;
+  background:
+    radial-gradient(ellipse at 0 4%, rgba(225, 48, 108, 0.07), transparent 40%),
+    radial-gradient(ellipse at 100% 70%, rgba(247, 119, 55, 0.07), transparent 45%),
+    var(--surface-primary);
 }
 @layer components {
   .glass,
+  .glass-strong,
+  .glass-control {
+    border: 1px solid var(--glass-border);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.5), transparent 55%), var(--glass-bg);
+    box-shadow: var(--glass-highlight), var(--glass-shadow);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(135%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(135%);
+  }
   .glass-strong {
-    @apply bg-white border border-slate-200 shadow-glass;
+    background-color: var(--glass-bg-strong);
+  }
+  .glass-control {
+    border-color: var(--line);
+    transition:
+      background-color 0.2s,
+      transform 0.2s,
+      box-shadow 0.2s;
+  }
+  .glass-control:hover {
+    background-color: white;
+    box-shadow:
+      var(--glass-highlight),
+      0 4px 16px rgba(54, 30, 43, 0.07);
+  }
+  .glass-control:active,
+  .primary-action:active {
+    transform: scale(0.985);
+  }
+  .primary-action {
+    background-image: var(--cta-gradient);
+    color: white;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.28),
+      0 5px 16px rgba(177, 34, 83, 0.16);
+    transition:
+      filter 0.2s,
+      transform 0.2s;
+  }
+  .primary-action:hover {
+    filter: brightness(1.04);
   }
   .ig-text {
-    @apply text-brand;
+    color: rgb(var(--brand));
   }
   .ig-border {
-    @apply border border-slate-300 bg-white;
+    border: 1px solid var(--line);
+    background: var(--glass-bg);
+  }
+  .brand-mark {
+    background-image: var(--brand-gradient);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.5),
+      0 6px 18px rgba(225, 48, 108, 0.16);
+  }
+  .surface-row {
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.7);
   }
   .skeleton {
     @apply bg-slate-200 animate-pulse rounded-xl;
   }
+  .page-shell {
+    @apply mx-auto w-full max-w-2xl px-5;
+  }
+  .landing-hero {
+    position: relative;
+    isolation: isolate;
+  }
+  .landing-hero::before {
+    content: '';
+    position: absolute;
+    inset: 12% -5% 18% 10%;
+    z-index: -1;
+    mask-image: radial-gradient(ellipse, black 15%, transparent 72%);
+    -webkit-mask-image: radial-gradient(ellipse, black 15%, transparent 72%);
+    background:
+      radial-gradient(ellipse at 40% 40%, rgba(225, 48, 108, 0.09), transparent 65%),
+      radial-gradient(ellipse at 85% 70%, rgba(247, 119, 55, 0.1), transparent 60%);
+    pointer-events: none;
+  }
 }
 :focus-visible {
-  outline: 3px solid #6554c0;
+  outline: 3px solid rgb(var(--brand));
   outline-offset: 3px;
 }
 .with-bottom-nav {
-  padding-bottom: calc(env(safe-area-inset-bottom) + 96px);
+  padding-bottom: calc(env(safe-area-inset-bottom) + 112px);
 }
 .field {
   display: block;
   width: 100%;
   min-width: 0;
-  border: 1px solid #cbd5e1;
-  border-radius: 12px;
-  padding: 12px;
-  background: white;
-  color: #202735;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 14px;
+  background: var(--glass-bg-strong);
+  color: var(--text-primary);
+  box-shadow: inset 0 1px 3px rgba(54, 30, 43, 0.025);
 }
 button,
 a,
 input {
   touch-action: manipulation;
 }
+input[type='checkbox'] {
+  accent-color: rgb(var(--brand));
+}
+svg.lucide {
+  stroke-width: 1.75;
+}
+dialog {
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg-strong);
+  box-shadow:
+    var(--glass-highlight),
+    0 24px 80px rgba(54, 30, 43, 0.18);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(140%);
+}
 dialog::backdrop {
-  background: rgba(15, 23, 42, 0.38);
-  backdrop-filter: blur(3px);
+  background: rgba(36, 24, 32, 0.24);
+  backdrop-filter: blur(4px);
 }
 dialog[open] {
-  animation: appear 0.18s ease-out;
+  animation: appear 0.2s ease-out;
 }
 @keyframes appear {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+@media (min-width: 768px) {
+  .page-shell {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}
+@media (max-width: 480px) {
+  :root {
+    --glass-blur: 10px;
+  }
+}
+@supports not (backdrop-filter: blur(1px)) {
+  .glass,
+  .glass-strong,
+  .glass-control,
+  dialog {
+    background: #fff;
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .glass-strong,
+  .glass-control,
+  dialog {
+    background: #fff;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 }
 @media (prefers-reduced-motion: reduce) {
